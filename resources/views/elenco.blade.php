@@ -73,6 +73,16 @@
                             <th>Ultima denuncia</th>
                             <th>Nato a</th>
                             <th>Nato il</th>
+                            <th>Azienda</th>
+                            <th>Altrove</th>
+                            <th>Tel FO</th>
+                            <th>Tel CE</th>
+                            <th>Tel GPS</th>
+                            <th>Tel SIN</th>
+                            <th>Tel altro</th>
+                            <th>Funzionario</th>
+                            <th>FRT</th>
+                            <th>Note</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -102,9 +112,22 @@
                                      {{$info->COMUNENASC}}
                                   </td>
                                   <td>
-                                     {{$info->DATANASC}}
+                                     {{date('d-m-Y', strtotime($info->DATANASC));}}
                                   </td>                                  
-                              </tr>  
+                                  <td>
+                                     {{$info->DENOM}}
+                                  </td>
+                                  <td>Altrove</td>
+                                  <td>{{$info->C1}}</td>
+                                  <td>{{$info->tel_ce}}</td>
+                                  <td>{{$info->tel_gps}}</td>
+                                  <td>{{$info->tel_sin}}</td>
+                                  <td>{{$info->tel_altro}}</td>
+                                  <td>Funzionario</td>
+                                  <td>FRT</td>
+                                  <td>Note</td>                                  
+
+                                </tr>  
                           @endforeach
                         </tbody>
                         <tfoot>
