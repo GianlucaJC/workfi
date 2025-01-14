@@ -118,11 +118,21 @@
                                      {{$info->DENOM}}
                                   </td>
                                   <td>Altrove</td>
-                                  <td>{{$info->C1}}</td>
-                                  <td>{{$info->tel_ce}}</td>
-                                  <td>{{$info->tel_gps}}</td>
-                                  <td>{{$info->tel_sin}}</td>
-                                  <td>{{$info->tel_altro}}</td>
+                                  <td>
+                                    <a id="phone1" href="{{$info->C1}}">{{$info->C1}}</a>
+                                  </td>
+                                  <td>
+                                    <a id="phone1" href="{{$info->tel_ce}}">{{$info->tel_ce}}</a>
+                                  </td>
+                                  <td>
+                                    <a id="phone1" href="{{$info->tel_gps}}">{{$info->tel_gps}}</a>
+                                  </td>
+                                  <td>
+                                    <a id="phone1" href="{{$info->tel_sin}}">{{$info->tel_sin}}</a>
+                                  </td>
+                                  <td>
+                                    <a id="phone1" href="{{$info->tel_altro}}">{{$info->tel_altro}}</a>
+                                  </td>
                                   <td>Funzionario</td>
                                   <td>FRT</td>
                                   <td>Note</td>                                  
