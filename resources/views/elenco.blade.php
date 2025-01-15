@@ -96,8 +96,11 @@
                                     ?> 
                                   </td>
                                   <td>
-                                    <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-primary btn-sm">Note</button>
-                                    <button type="button" class="btn btn-secondary btn-sm">FRT</button>
+                                    <?php
+                                      if (isset($info->posizione) && strlen($info->posizione)>0) {?>
+                                        <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-primary btn-sm">Note</button>
+                                        <button type="button" class="btn btn-secondary btn-sm">FRT</button>
+                                    <?php } ?>    
 
                                   </td> 
                                   <td>
