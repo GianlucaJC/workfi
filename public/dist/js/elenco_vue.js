@@ -32,6 +32,7 @@ var app = Vue.component('App',{
                     <i class="fas fa-spinner fa-spin"></i>
                 </p>
                 <button type="button" v-if="isnew==false" class="btn btn-success" @click="save_nota()">Salva</button>
+				<button type="button" v-if="flagsave==1" class="ml-2 btn btn-outline-primary" @click="refr()">Refresh tabella (se vuoi vedere subito la nota)</button>
 
                 <button type="button" class="ml-2 btn btn-secondary" @click='close_edit()'>Torna all'elenco</button>
             </div>
@@ -95,14 +96,14 @@ var app = Vue.component('App',{
         reset_form() {
             this.testo_nota="";
         },
+		refr() {
+			window.location.href = 'main';
+		},
         close_edit(){
-            if (this.flagsave==0) {
-                this.edit_new=null;            
-                $("#div_table").show(150)
-            } else {
-                window.location.href = 'libri';
-            }
-
+			this.flagsave=0
+			this.edit_new=null;            
+			$("#div_table").show(150)
+           
         },
         active(from) {
             $("#div_table").hide()

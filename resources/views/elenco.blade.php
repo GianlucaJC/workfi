@@ -88,7 +88,7 @@
                         </thead>
                         <tbody>
                           @foreach($elenco as $info)
-                              <tr id='tr{{$info->ID_anagr}}'w'>
+                              <tr id='tr{{$info->ID_anagr}}'>
                                   <td>
                                     <?php
                                       if (isset($note[$info->posizione])) echo "<b>".$info->NOME."</b>";
@@ -99,8 +99,8 @@
                                     <?php
                                       if (isset($info->posizione) && strlen($info->posizione)>0) {?>
                                         <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-primary btn-sm">Note</button>
-                                        <button type="button" class="btn btn-secondary btn-sm">FRT</button>
                                     <?php } ?>    
+                                      <button type="button" class="btn btn-secondary btn-sm">FRT</button>
 
                                   </td> 
                                   <td>
