@@ -50,6 +50,7 @@
                 </div>    
 
                 <form method='post' action="{{ route('main') }}" id='frm_main' name='frm_main' autocomplete="off">
+                    <input type="hidden" value="{{url('/')}}" id="url" name="url">
                     <input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>	  
                     <input type='hidden' name='tipo_view' id='tipo_view' value='{{$tipo_view}}'>
 
@@ -87,12 +88,15 @@
                         </thead>
                         <tbody>
                           @foreach($elenco as $info)
-                              <tr id='tr{{$info->ID_anagr}}'">
+                              <tr id='tr{{$info->ID_anagr}}'w'>
                                   <td>
-                                     {{$info->NOME}}
+                                    <?php
+                                      if (isset($note[$info->posizione])) echo "<b>".$info->NOME."</b>";
+                                      else echo $info->NOME;
+                                    ?> 
                                   </td>
                                   <td>
-                                    <button type="button" onclick='add_nota()' class="btn btn-primary btn-sm">Note</button>
+                                    <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-primary btn-sm">Note</button>
                                     <button type="button" class="btn btn-secondary btn-sm">FRT</button>
 
                                   </td> 
@@ -119,23 +123,66 @@
                                   </td>
                                   <td>Altrove</td>
                                   <td>
-                                    <a id="phone1" href="{{$info->C1}}">{{$info->C1}}</a>
+                                    <a id="phone1" href="tel:{{$info->C1}}">{{$info->C1}}</a>
                                   </td>
                                   <td>
-                                    <a id="phone1" href="{{$info->tel_ce}}">{{$info->tel_ce}}</a>
+                                    <a id="phone2" href="tel:{{$info->tel_ce}}">{{$info->tel_ce}}</a>
                                   </td>
                                   <td>
-                                    <a id="phone1" href="{{$info->tel_gps}}">{{$info->tel_gps}}</a>
+                                    <a id="phone3" href="tel:{{$info->tel_gps}}">{{$info->tel_gps}}</a>
                                   </td>
                                   <td>
-                                    <a id="phone1" href="{{$info->tel_sin}}">{{$info->tel_sin}}</a>
+                                    <a id="phone4" href="tel:{{$info->tel_sin}}">{{$info->tel_sin}}</a>
                                   </td>
                                   <td>
-                                    <a id="phone1" href="{{$info->tel_altro}}">{{$info->tel_altro}}</a>
+                                    <a id="phone5" href="tel:{{$info->tel_altro}}">{{$info->tel_altro}}</a>
                                   </td>
                                   <td>Funzionario</td>
                                   <td>FRT</td>
-                                  <td>Note</td>                                  
+                                  <td>
+                                    <?php
+                                      if (isset($note[$info->posizione])) {
+                                        $view='<table class="table">
+                                          <thead>
+                                            <tr>
+                                              <th scope="col">Utente</th>
+                                              <th scope="col">Data</th>
+                                              <th scope="col">Nota</th>
+                                              <th scope="col">Stato</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>';
+                                            for ($sca=0;$sca<count($note[$info->posizione]);$sca++) {
+                                              $view.="<tr>";
+                                                $view.="<td>";
+                                                  $view.=$note[$info->posizione][$sca]->id_user;
+                                                $view.="</td>";
+                                                $view.="<td>";
+                                                  $view.=$note[$info->posizione][$sca]->created_at;
+                                                $view.="</td>";                                                
+                                                $view.="<td>";
+                                                  $view.="<i>".$note[$info->posizione][$sca]->note."</i>";
+                                                $view.="</td>";
+                                                $view.="<td style='text-align:center'>";
+                                                  if  ($note[$info->posizione][$sca]->stato_nota=="1")
+                                                    $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #ff0000;'></i>";
+                                                  if  ($note[$info->posizione][$sca]->stato_nota=="2")
+                                                    $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #FFD43B;'></i>";
+                                                  if  ($note[$info->posizione][$sca]->stato_nota=="3")
+                                                    $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #00ca00;'></i>";
+                                                $view.="</td>";
+
+                                              $view.="</tr>";  
+                                            }
+                                          $view.='
+                                          </tbody>  
+                                        </table>';
+                                        echo $view;
+
+                                      }
+                                    ?>
+
+                                  </td>                                  
 
                                 </tr>  
                           @endforeach

@@ -6,65 +6,62 @@ var app = Vue.component('App',{
 		 <div class='container mt-5' v-if="edit_new!=null">
             <span class='mb-4'>Definizione Nota</span>
             <p v-if="resp==null">
-                Caricamento dati utente in corso <i class="fas fa-spinner fa-spin"></i>
+                Caricamento dati in corso <i class="fas fa-spinner fa-spin"></i>
             </p>
-
-
 
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Testo libero*</span>
                 </div>
-                <textarea required placeholder='Descrizione' class="form-control" aria-label="Testo libero" v-model='testo_nota' aria-describedby="Descrizione del libro" rows="5"></textarea>
+                <textarea required placeholder='Descrizione' class="form-control" aria-label="Testo libero" v-model='testo_nota' aria-describedby="Descrizione della nota" rows="5"></textarea>
             </div>
 
+			<div class='mt-2'>
+				Impostazione stato: 
+				<a href='javascript:void(0)'>
+				<i class="far fa-circle fa-lg mt-3 semaforo" style="color: #ff0000;" id="sem1" @click='set_stato(1)'></i></a>
+				<a href='javascript:void(0)'>
+				<i class="far fa-circle fa-lg mt-3 semaforo" style="color: #FFD43B;" id="sem2" @click='set_stato(2)'></i></a>
+				<a href='javascript:void(0)'>
+				<i class="far fa-circle fa-lg mt-3 semaforo" style="color: #00ca00;" id="sem3" @click='set_stato(3)'></i></a>
+			</div>
 
-            <div>
-                <small>I dai contrassegnati con * sono obbligatori</small>
-            </div>
 
             <div class='mt-3'>
                 <p v-if='savewait==true'>
                     <i class="fas fa-spinner fa-spin"></i>
                 </p>
-                <button type="button" v-if="isnew==false" class="btn btn-success" @click="save_book()">Salva</button>
+                <button type="button" v-if="isnew==false" class="btn btn-success" @click="save_nota()">Salva</button>
 
                 <button type="button" class="ml-2 btn btn-secondary" @click='close_edit()'>Torna all'elenco</button>
             </div>
- 
-
-		</div>
+ 		</div>
         </form>	
 			
 	`,
 	data() {
+        let codlav=0;
+		let user="";
         let flagsave=0;
         let isnew=false;
         let savewait=false
-        let id_libro=0;
+		let stato_nota=0;
         let edit_new=null;
         let resp=null
-
 		let testo_nota="";
-        
-        
-
-
-        
         let ref_ente="";
 
 		return {
+			codlav,
+			user,
             flagsave,
             isnew,
             savewait,
-            id_libro,
+			stato_nota,
             edit_new,
             resp,
 			testo_nota,
-            
-
-
-			ref_ente,
+            ref_ente,
 
 		};
 	},
@@ -88,10 +85,15 @@ var app = Vue.component('App',{
 		//this.events(this.periodo_ref)
     },	
 	methods: {
+		set_stato(from) {
+			$(".semaforo").removeClass("fas fa-circle")
+			$(".semaforo").removeClass("far fa-circle")
+			$(".semaforo").addClass("far fa-circle")
+			$("#sem"+from).addClass("fas fa-circle")
+			work.stato_nota=from
+		},
         reset_form() {
             this.testo_nota="";
-            
-
         },
         close_edit(){
             if (this.flagsave==0) {
@@ -111,14 +113,12 @@ var app = Vue.component('App',{
         },
 		check_ins() {
 			let testo_nota=this.testo_nota
-            
-
             if (testo_nota.length==0) return false
 		},  
 
           
-		save_book() {
-            
+		save_nota() {
+            base_path = $("#url").val();
             check=this.check_ins()
             if (check==false) {
                 alert("Attenzione! Compilare tutti i campi contrassegnati con * e la correttezza dei dati")
@@ -132,13 +132,13 @@ var app = Vue.component('App',{
 				//<meta name="csrf-token" content="{{{ csrf_token() }}}"> //da inserire in html
 				const metaElements = document.querySelectorAll('meta[name="csrf-token"]');
 				const csrf = metaElements.length > 0 ? metaElements[0].content : "";			
-				fetch("save_book", {
+				fetch(base_path+"/save_nota", {
 					method: 'post',
 					headers: {
 						"Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
 						"X-CSRF-Token": csrf
 					},
-					body: "id_libro="+self.id_libro+"&testo_nota="+self.testo_nota
+					body: "user="+self.user+"&codlav="+self.codlav+"&testo_nota="+self.testo_nota+"&stato_nota="+self.stato_nota
 				})
 				.then(response => {
 					if (response.ok) {
@@ -147,11 +147,9 @@ var app = Vue.component('App',{
 				})
 				.then(response=>{
                     self.savewait=false
-					esito=response.header
+					esito=response.esito
                     if (esito=="OK") {
                         self.flagsave=1
-                        if (self.id_libro==0) self.isnew=true 
-                        else self.isnew=false
                         alert("Dati salvati con successo!")
 
                     } 
@@ -249,18 +247,18 @@ function view(from) {
     work.reset_form();
     if (from && from!=="0") {
         work.load_info(from)
-        work.id_libro=from
     } else {
     	//window.work.active(from); 
     }    
 }
 
 
-function add_nota() {
+function add_nota(codlav,user) {
+	work.codlav=codlav
+	work.user=user
     work.flagsave=0
     work.isnew=false
     work.resp=null
     work.reset_form();
-    work.id_libro=0
     window.work.active(0); 
 }

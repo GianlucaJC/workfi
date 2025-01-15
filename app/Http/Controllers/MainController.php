@@ -50,6 +50,18 @@ class mainController extends Controller
 		} else return $this->elenco();
     }	
 
+	public function note() {
+		$elenco=DB::table('bsfi.note')
+		->select("*")->orderBy('created_at','desc')
+		->get();
+		$info=array();
+		foreach ($elenco as $nota) {
+			$codlav=$nota->codlav;
+			$info[$codlav][]=$nota;
+		}
+		return $info;
+
+	}
 
 	public function elenco() {
 		$request=Request();
@@ -60,14 +72,17 @@ class mainController extends Controller
 		->whereNotNull('id_import')
 		->get();
 		
+		$note=$this->note();
 		$isadmin=1;
-		$id_user=1;
+		$user = session('id');
+		
 		$solo_pref=1;
 	
 
-		return view('elenco',compact('elenco','isadmin','id_user','solo_pref','tipo_view'));
+		return view('elenco',compact('elenco','isadmin','user','solo_pref','tipo_view','note'));
 
    }	
+
 
 
 }

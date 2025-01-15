@@ -20,4 +20,6 @@ Route::get('/', function () {
 Route::get('/main/{token?}', [ 'as' => 'main', 'uses' => 'App\Http\Controllers\MainController@main']);
 Route::post('/main/{token?}', [ 'as' => 'main', 'uses' => 'App\Http\Controllers\MainController@main']);
 
+
+Route::post('save_nota', 'App\Http\Controllers\AjaxController@save_nota');
 Route::post('/elenco}', [ 'as' => 'elenco', 'uses' => 'App\Http\Controllers\MainController@elenco']);
