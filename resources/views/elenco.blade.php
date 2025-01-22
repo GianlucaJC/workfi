@@ -49,7 +49,7 @@
 
             const metaElements = document.querySelectorAll('meta[name="csrf-token"]');
             const csrf = metaElements.length > 0 ? metaElements[0].content : "";			
-            fetch(base_path+'/"register_push", {
+            fetch(base_path+"/register_push", {
               method: 'post',
               headers: {
               "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
