@@ -44,9 +44,12 @@
           //register_push("test") //per test in locale
           function register_push(pushid) {
             id_user="F0001"
+            base_path = $("#url").val();
+            let CSRF_TOKEN = $("#token_csrf").val();
+
             const metaElements = document.querySelectorAll('meta[name="csrf-token"]');
             const csrf = metaElements.length > 0 ? metaElements[0].content : "";			
-            fetch("register_push", {
+            fetch(base_path+'/"register_push", {
               method: 'post',
               headers: {
               "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
