@@ -23,3 +23,6 @@ Route::post('/main/{token?}', [ 'as' => 'main', 'uses' => 'App\Http\Controllers\
 
 Route::post('save_nota', 'App\Http\Controllers\AjaxController@save_nota');
 Route::post('/elenco}', [ 'as' => 'elenco', 'uses' => 'App\Http\Controllers\MainController@elenco']);
+
+Route::post('register_push', [ 'as' => 'register_push', 'uses' => 'App\Http\Controllers\ApiController@register_push']);
+Route::get('register_push', [ 'as' => 'register_push', 'uses' => 'App\Http\Controllers\ApiController@register_push']);

@@ -73,16 +73,53 @@ class mainController extends Controller
 		->get();
 		
 		$note=$this->note();
+		$funzionari=$this->funzionari();
+		$elenco_assegnazioni=$this->elenco_assegnazioni();
 		$isadmin=1;
 		$user = session('id');
 		
 		$solo_pref=1;
 	
 
-		return view('elenco',compact('elenco','isadmin','user','solo_pref','tipo_view','note'));
+		return view('elenco',compact('elenco','isadmin','user','solo_pref','tipo_view','note','funzionari','elenco_assegnazioni'));
 
    }	
 
+   public function funzionari() {
+		$elenco=DB::table('online.db')
+		->select("N_TESSERA","UTENTEFILLEA")
+		->get();
+		$res=array();
+		foreach($elenco as $row) {
+			$res[$row->N_TESSERA]=$row->UTENTEFILLEA;
+		}
+		return $res;	
+   }
+
+   public function elenco_assegnazioni() {
+	$res=array();$sca=0;$old="?";
+
+	$elenco=DB::table('bsfi.aziende_workfi')
+	->select("id","denom as azienda",'id_funzionario')
+	->get();
+
+	foreach($elenco as $risposta) {
+		$azienda=$risposta->azienda;
+		if ($old!=$azienda) {
+			$sca=0;$old=$azienda;
+		}
+		$id_assegnazione=$risposta->id;
+		$id_funzionario=$risposta->id_funzionario;
+		$azienda=str_replace("'","",$azienda);
+		$azienda=str_replace('"',"",$azienda);
+		$res[$azienda][$sca]['id_funzionario']=$id_funzionario;
+		$res[$azienda][$sca]['id_assegnazione']=$id_assegnazione;
+		$sca++;
+	}
+
+	return $res;	
+	
+}
 
 
 }

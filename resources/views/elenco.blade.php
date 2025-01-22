@@ -22,6 +22,53 @@
         <!-- Font Awesome Icons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+        <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
+        <script>
+          window.OneSignalDeferred = window.OneSignalDeferred || [];
+          OneSignalDeferred.push(function (OneSignal) {
+            OneSignal.init({
+              appId: "ced02228-d23a-4726-9fe9-1844d6bf9ca9",
+            });
+            OneSignal.User.PushSubscription.addEventListener("change", function (event) {
+              console.log("event");
+              console.log(event);
+              if (event.current.id) {
+                  register_push(event.current.id)
+              }
+
+
+            });
+          });		
+          
+          //register_push("test") //per test in locale
+          function register_push(pushid) {
+            id_user="F0001"
+            const metaElements = document.querySelectorAll('meta[name="csrf-token"]');
+            const csrf = metaElements.length > 0 ? metaElements[0].content : "";			
+            fetch("register_push", {
+              method: 'post',
+              headers: {
+              "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+              "X-CSRF-Token": csrf
+              },
+              body: "pushid="+pushid+"&id_user="+id_user
+            })
+            .then(response => {
+              if (response.ok) {
+                return response.json();
+              }
+            })
+            .then(resp=>{
+
+            })
+            .catch(status, err => {
+              return console.log(status, err);
+            })		
+          }			
+          
+        </script>	
+
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -71,7 +118,7 @@
                             <th>Azioni</th>
                             <th>Scarico del</th>
                             <th>Posizione</th>
-                            <th>Ultima denuncia</th>
+                            <th>Funzionari assegnati</th>
                             <th>Nato a</th>
                             <th>Nato il</th>
                             <th>Azienda</th>
@@ -81,7 +128,6 @@
                             <th>Tel GPS</th>
                             <th>Tel SIN</th>
                             <th>Tel altro</th>
-                            <th>Funzionario</th>
                             <th>FRT</th>
                             <th>Note</th>
                           </tr>
@@ -113,7 +159,25 @@
                                      {{$info->posizione}}
                                   </td>
                                   <td>
-                                     {{$info->ultima_denuncia}}
+                                    <?php
+                                      $azienda=$info->DENOM;
+                                      $azienda_clean=str_replace("'","",$azienda);
+                                      $azienda_clean=str_replace('"',"",$azienda_clean);
+                                      $entr=false;
+                                      if (array_key_exists($azienda_clean,$elenco_assegnazioni)){	
+                                        $entr=true;
+                                        for ($i=0;$i<count($elenco_assegnazioni[$azienda_clean]);$i++) {
+                                          if ($i>0) echo "<hr>";
+                                          $id_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['id_assegnazione'];
+                                          $id_funz=$elenco_assegnazioni[$azienda_clean][$i]['id_funzionario'];
+                              
+                                          if (array_key_exists($id_funz,$funzionari)) {
+                                            echo "<b>$id_funz</b>: ";
+                                            echo $funzionari[$id_funz];
+                                          }
+                                        }
+                                      }                                     
+                                    ?>
                                   </td>
                                   <td>
                                      {{$info->COMUNENASC}}
@@ -122,7 +186,7 @@
                                      {{date('d-m-Y', strtotime($info->DATANASC));}}
                                   </td>                                  
                                   <td>
-                                     {{$info->DENOM}}
+                                      {{$info->DENOM}}
                                   </td>
                                   <td>Altrove</td>
                                   <td>
@@ -140,7 +204,7 @@
                                   <td>
                                     <a id="phone5" href="tel:{{$info->tel_altro}}">{{$info->tel_altro}}</a>
                                   </td>
-                                  <td>Funzionario</td>
+                                  
                                   <td>FRT</td>
                                   <td>
                                     <?php
