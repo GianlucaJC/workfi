@@ -28,7 +28,7 @@
           window.OneSignalDeferred = window.OneSignalDeferred || [];
           OneSignalDeferred.push(function (OneSignal) {
             OneSignal.init({
-              appId: "ced02228-d23a-4726-9fe9-1844d6bf9ca9",
+              appId: "1ecaf775-b78f-45cd-95d4-acb2f04e8047",
             });
             OneSignal.User.PushSubscription.addEventListener("change", function (event) {
               console.log("event");
