@@ -43,7 +43,7 @@
           
           //register_push("test") //per test in locale
           function register_push(pushid) {
-            id_user="<?php echo $id_user;?>"
+            id_user="<?php echo $user;?>"
             base_path = $("#url").val();
             let CSRF_TOKEN = $("#token_csrf").val();
 
