@@ -20,7 +20,7 @@ class ApiController extends Controller
 		$id_user=$request->input("id_user");
 		$pushid=$request->input("pushid");
 		if (strlen($pushid)>0) {
-			user::where('id', $id_user)->update(['push_id' => $pushid]);
+			user::where('email', $id_user)->update(['push_id' => $pushid]);
 		}
 		$resp=array();
 		$resp['esito']="OK";
