@@ -118,6 +118,7 @@
                         <thead>
                           <tr>
                             <th>Nominativo</th>
+                            <th>Stat</th>
                             <th>Azioni</th>
                             <th>Scarico del</th>
                             <th>Posizione</th>
@@ -137,6 +138,12 @@
                         </thead>
                         <tbody>
                           @foreach($elenco as $info)
+                            <?php
+                              $azienda=$info->DENOM;
+                              $azienda_clean=str_replace("'","",$azienda);
+                              $azienda_clean=str_replace('"',"",$azienda_clean);                          
+                            ?>
+
                               <tr id='tr{{$info->ID_anagr}}'>
                                   <td>
                                     <?php
@@ -144,6 +151,24 @@
                                       else echo $info->NOME;
                                     ?> 
                                   </td>
+
+                                  <td>
+                                    <?php
+                                    
+                                      if (array_key_exists($azienda_clean,$stat_azi)){
+                                        if (isset($stat_azi[$azienda_clean]['liberi']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #FFD43B;'> <small>".$stat_azi[$azienda_clean]['liberi']."</small></i> ";
+                                        if (isset($stat_azi[$azienda_clean]['filca']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #63E6BE;'> <small>".$stat_azi[$azienda_clean]['filca']."</small></i> ";
+                                        if (isset($stat_azi[$azienda_clean]['feneal']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #74C0FC;'> <small>".$stat_azi[$azienda_clean]['feneal']."</small></i> ";
+                                        if (isset($stat_azi[$azienda_clean]['fillea']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #FF0000;'> <small>".$stat_azi[$azienda_clean]['fillea']."</small></i> ";
+
+                                      }
+                                    ?> 
+                                  </td>
+
                                   <td>
                                     <?php
                                       if (isset($info->posizione) && strlen($info->posizione)>0) {?>
@@ -152,6 +177,7 @@
                                       <button type="button" class="btn btn-secondary btn-sm">FRT</button>
 
                                   </td> 
+
                                   <td>
                                     {{$info->data_scarico}}
                                     <span id='id_ref{{$info->ID_anagr}}' 
@@ -163,9 +189,6 @@
                                   </td>
                                   <td>
                                     <?php
-                                      $azienda=$info->DENOM;
-                                      $azienda_clean=str_replace("'","",$azienda);
-                                      $azienda_clean=str_replace('"',"",$azienda_clean);
                                       $entr=false;
                                       if (array_key_exists($azienda_clean,$elenco_assegnazioni)){	
                                         $entr=true;

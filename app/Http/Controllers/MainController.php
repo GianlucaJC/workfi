@@ -75,13 +75,14 @@ class mainController extends Controller
 		$note=$this->note();
 		$funzionari=$this->funzionari();
 		$elenco_assegnazioni=$this->elenco_assegnazioni();
+		$stat_azi=$this->stat_azi();
 		$isadmin=1;
 		$user = session('id');
 		
 		$solo_pref=1;
 	
 
-		return view('elenco',compact('elenco','isadmin','user','solo_pref','tipo_view','note','funzionari','elenco_assegnazioni'));
+		return view('elenco',compact('elenco','isadmin','user','solo_pref','tipo_view','note','funzionari','elenco_assegnazioni','stat_azi'));
 
    }	
 
@@ -97,29 +98,74 @@ class mainController extends Controller
    }
 
    public function elenco_assegnazioni() {
-	$res=array();$sca=0;$old="?";
+		$res=array();$sca=0;$old="?";
 
-	$elenco=DB::table('bsfi.aziende_workfi')
-	->select("id","denom as azienda",'id_funzionario')
-	->get();
+		$elenco=DB::table('bsfi.aziende_workfi')
+		->select("id","denom as azienda",'id_funzionario')
+		->get();
 
-	foreach($elenco as $risposta) {
-		$azienda=$risposta->azienda;
-		if ($old!=$azienda) {
-			$sca=0;$old=$azienda;
+		foreach($elenco as $risposta) {
+			$azienda=$risposta->azienda;
+			if ($old!=$azienda) {
+				$sca=0;$old=$azienda;
+			}
+			$id_assegnazione=$risposta->id;
+			$id_funzionario=$risposta->id_funzionario;
+			$azienda=str_replace("'","",$azienda);
+			$azienda=str_replace('"',"",$azienda);
+			$res[$azienda][$sca]['id_funzionario']=$id_funzionario;
+			$res[$azienda][$sca]['id_assegnazione']=$id_assegnazione;
+			$sca++;
 		}
-		$id_assegnazione=$risposta->id;
-		$id_funzionario=$risposta->id_funzionario;
-		$azienda=str_replace("'","",$azienda);
-		$azienda=str_replace('"',"",$azienda);
-		$res[$azienda][$sca]['id_funzionario']=$id_funzionario;
-		$res[$azienda][$sca]['id_assegnazione']=$id_assegnazione;
-		$sca++;
+
+		return $res;	
+	
 	}
 
-	return $res;	
-	
-}
+	function stat_azi() {
+		$elenco=DB::table('anagrafe.t2_tosc_a')
+		->select("denom")
+		->whereNotNull('id_import')
+		->groupby('denom')
+		->get();
+		$res=array();
+		
+		foreach($elenco as $info) {
+			$azienda=$info->denom;
+			$azienda_clean=str_replace("'","",$azienda);
+			$azienda_clean=str_replace('"',"",$azienda_clean);
 
+			$liberi=DB::table('anagrafe.t2_tosc_a')
+			->where('denom','=',$azienda)
+			->where('sindacato','=',0)
+			->where('attivi','=',"S")
+			->count();
+
+			$filca=DB::table('anagrafe.t2_tosc_a')
+			->where('denom','=',$azienda)
+			->where('sindacato','=',2)
+			->where('attivi','=',"S")
+			->count();			
+
+			$feneal=DB::table('anagrafe.t2_tosc_a')
+			->where('denom','=',$azienda)
+			->where('sindacato','=',3)
+			->where('attivi','=',"S")
+			->count();			
+
+			$fillea=DB::table('anagrafe.t2_tosc_a')
+			->where('denom','=',$azienda)
+			->where('sindacato','=',1)
+			->where('attivi','=',"S")
+			->count();			
+			if ($liberi>0) $res[$azienda_clean]['liberi']=$liberi;
+			if ($filca>0) $res[$azienda_clean]['filca']=$filca;
+			if ($feneal>0) $res[$azienda_clean]['feneal']=$feneal;
+			if ($fillea>0) $res[$azienda_clean]['fillea']=$fillea;
+			
+		}
+		return $res;
+
+	}
 
 }
