@@ -45,8 +45,8 @@ class mainController extends Controller
 						$user=$info->N_TESSERA;
 						Session::put( 'id', $user);
 						return $this->elenco();
-					} else {echo "ACCESSO NEGATO (provare a loggarsi dal portale FilleaOffice)";exit;}
-			} else {echo "ACCESSO NEGATO (provare a loggarsi dal portale FilleaOffice)";exit;}
+					} else {return redirect()->away('https://www.filleaoffice.it');}
+			} else {return redirect()->away('https://www.filleaoffice.it');}
 		} else return $this->elenco();
     }	
 
