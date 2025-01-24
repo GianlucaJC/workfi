@@ -45,8 +45,8 @@ class mainController extends Controller
 						$user=$info->N_TESSERA;
 						Session::put( 'id', $user);
 						return $this->elenco();
-					} else {return redirect()->away('https://www.filleaoffice.it');}
-			} else {return redirect()->away('https://www.filleaoffice.it');}
+					} else {return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');}
+			} else {return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');}
 		} else return $this->elenco();
     }	
 
@@ -157,11 +157,19 @@ class mainController extends Controller
 			->where('denom','=',$azienda)
 			->where('sindacato','=',1)
 			->where('attivi','=',"S")
-			->count();			
+			->count();		
+			
+			$n_spec=DB::table('anagrafe.t2_tosc_a')
+			->where('denom','=',$azienda)
+			->where('sindacato','=',' ')
+			->where('attivi','=',"S")
+			->count();		
+			
 			if ($liberi>0) $res[$azienda_clean]['liberi']=$liberi;
 			if ($filca>0) $res[$azienda_clean]['filca']=$filca;
 			if ($feneal>0) $res[$azienda_clean]['feneal']=$feneal;
 			if ($fillea>0) $res[$azienda_clean]['fillea']=$fillea;
+			if ($n_spec>0) $res[$azienda_clean]['n_spec']=$n_spec;
 			
 		}
 		return $res;

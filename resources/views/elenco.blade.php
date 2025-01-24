@@ -164,7 +164,8 @@
                                           echo "<i class='fas fa-square fa-sm' style='color: #74C0FC;'> <small>".$stat_azi[$azienda_clean]['feneal']."</small></i> ";
                                         if (isset($stat_azi[$azienda_clean]['fillea']))
                                           echo "<i class='fas fa-square fa-sm' style='color: #FF0000;'> <small>".$stat_azi[$azienda_clean]['fillea']."</small></i> ";
-
+                                        if (isset($stat_azi[$azienda_clean]['n_spec']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #ccccd1;'> <small>".$stat_azi[$azienda_clean]['n_spec']."</small></i> ";
                                       }
                                     ?> 
                                   </td>
