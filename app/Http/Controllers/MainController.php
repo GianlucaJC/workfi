@@ -72,6 +72,9 @@ class mainController extends Controller
 		->whereNotNull('id_import')
 		->get();
 		
+
+		$info_altrove=array();
+		/*
 		$altrove=DB::table('anagrafe.t2_tosc_a as t')
 		->join('anagrafe_regioni.globale as g', function ($join) {
 			$join->on('g.nome', '=', 't.nome')
@@ -82,15 +85,15 @@ class mainController extends Controller
 		->groupBy('g.IDARC')
 		->get();
 		$ind=0;
-		$info_altrove=array();
-		/*
+		
+		
 		foreach($altrove as $altro) {
 			$id_ref=$altro->id_anagr;
 			if (!isset($info_altrove[$id_ref])) $ind=0;
 			else $ind++;
 			$info_altrove[$id_ref][$ind]=$altro->altrove;
 		}
-			*/
+		*/
 		
 
 		$note=$this->note();
