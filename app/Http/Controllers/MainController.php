@@ -72,6 +72,25 @@ class mainController extends Controller
 		->whereNotNull('id_import')
 		->get();
 		
+		$altrove=DB::table('anagrafe.t2_tosc_a as t')
+		->join('anagrafe_regioni.globale as g', function ($join) {
+			$join->on('g.nome', '=', 't.nome')
+				 ->on('g.datanasc', '=', 't.datanasc');
+		})
+		->select("g.PROVINCIA as altrove","t.id_anagr")
+		->where('g.IDARC','<>','t2.tosc_a')
+		->groupBy('g.IDARC')
+		->get();
+		$ind=0;
+		$info_altrove=array();
+		foreach($altrove as $altro) {
+			$id_ref=$altro->id_anagr;
+			if (!isset($info_altrove[$id_ref])) $ind=0;
+			else $ind++;
+			$info_altrove[$id_ref][$ind]=$altro->altrove;
+		}
+		
+
 		$note=$this->note();
 		$funzionari=$this->funzionari();
 		$elenco_assegnazioni=$this->elenco_assegnazioni();
@@ -82,9 +101,10 @@ class mainController extends Controller
 		$solo_pref=1;
 	
 
-		return view('elenco',compact('elenco','isadmin','user','solo_pref','tipo_view','note','funzionari','elenco_assegnazioni','stat_azi'));
+		return view('elenco',compact('elenco','isadmin','user','solo_pref','tipo_view','note','funzionari','elenco_assegnazioni','stat_azi','info_altrove'));
 
    }	
+
 
    public function funzionari() {
 		$elenco=DB::table('online.db')

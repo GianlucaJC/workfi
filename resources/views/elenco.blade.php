@@ -114,7 +114,6 @@
                         ?>
                         <button type="button" class="btn btn-{{$out}}primary btn-sm" onclick="$('#tipo_view').val({{$value_e}});$('#frm_main').submit();">{{$txt}}</button>
                       </div>
-
                       <table id='tbl_articoli' class="display nowrap">
                         <thead>
                           <tr>
@@ -216,7 +215,17 @@
                                   <td>
                                       {{$info->DENOM}}
                                   </td>
-                                  <td>Altrove</td>
+                                  <td>
+                                    <?php
+                                      if (isset($info_altrove[$info->ID_anagr])) {
+                                          $refarr=$info_altrove[$info->ID_anagr];
+                                          for ($xx=0;$xx<count($refarr);$xx++) {
+                                              if ($xx>0) echo "<hr>";
+                                              echo $refarr[$xx];
+                                          }
+                                      }
+                                    ?>
+                                  </td>
                                   <td>
                                     <a id="phone1" href="tel:{{$info->C1}}">{{$info->C1}}</a>
                                   </td>
