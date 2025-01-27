@@ -83,12 +83,14 @@ class mainController extends Controller
 		->get();
 		$ind=0;
 		$info_altrove=array();
+		/*
 		foreach($altrove as $altro) {
 			$id_ref=$altro->id_anagr;
 			if (!isset($info_altrove[$id_ref])) $ind=0;
 			else $ind++;
 			$info_altrove[$id_ref][$ind]=$altro->altrove;
 		}
+			*/
 		
 
 		$note=$this->note();
