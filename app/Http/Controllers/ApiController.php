@@ -10,6 +10,11 @@ use DB;
 class ApiController extends Controller
 {
 	/*
+		per loggarsi bypassando il login:
+		da online.db prelevare il campo laravel_token ed appenderlo alla fine della url
+		es: http://localhost:8012/workfi/public/main/1501beebf2efba5e6f063d02227d7bfe
+	*/
+	/*
 	public function __construct() {
 		header("Access-Control-Allow-Origin: *");
 		header("Content-Type: application/json; charset=UTF-8");
