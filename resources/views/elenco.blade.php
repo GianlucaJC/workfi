@@ -25,47 +25,6 @@
         <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
         <script>
-          OneSignal.push(["addListenerForNotificationOpened", function(event) {
-            console.log("OneSignal notification clicked:", event);
-            
-            {
-                "id": "1ecaf775-b78f-45cd-95d4-acb2f04e8047",
-                "heading": "Notifica Push",
-                "content": "Nuove aziende-lavoratori assegnati",
-                "data": {
-                    "notificationType": "news-feature"
-                },
-                "url": "https://www.filleaoffice.it",
-                "icon": "https://www.filleaoffice.it/icon_1024.png",
-                "buttons": [
-                    {
-                        "action": "button-go",
-                        "title": "Vai al servizio",
-                        "icon": "https://www.filleaoffice.it/icon_1024.png",
-                        "url": "https://www.filleaoffice.it:8013/workfi/public/main"
-                    },
-
-                ],
-                "action": "like-button"
-            }
-            // We might send a lot of different notifications; the notification we just sent came with additional data that describes the kind of notification that was sent. We sent "notificationType" with our additional data field (notificationType is not built in).
-            var isNewsFeatureNotification = event.data && event.data.notificationType === 'news-feature';
-            if (isNewsFeatureNotification) {
-              // What action button did they click?
-              if (event.action === "") {
-                // An empty string means the notification body was clicked (no action button was clicked)
-                // Keep in mind action buttons are only supported on Chrome 48+ so some users will only be able to click the notification body
-              } else if (event.action === 'like-button') {
-                // The "Like" action button was clicked
-                console.log("first click")
-                //alert("Glad you liked it! We'll show you similar stories in the future");
-              } else if (event.action === 'read-more-button') {
-                console.log("second click")
-                //alert('Showing you the full news article...');
-              }
-            }          
-
-          }]);
 
 
           window.OneSignalDeferred = window.OneSignalDeferred || [];
