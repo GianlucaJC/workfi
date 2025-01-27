@@ -26,7 +26,6 @@
 
         <script>
 
-
           window.OneSignalDeferred = window.OneSignalDeferred || [];
           OneSignalDeferred.push(function (OneSignal) {
             OneSignal.init({
@@ -284,7 +283,27 @@
                           @endforeach
                         </tbody>
                         <tfoot>
-
+                      
+                          <tr>
+                            <th>Nominativo</th>
+                            <th>Stat</th>
+                            <th></th>
+                            <th>Scarico del</th>
+                            <th>Posizione</th>
+                            <th>Funzionari assegnati</th>
+                            <th>Nato a</th>
+                            <th>Nato il</th>
+                            <th>Azienda</th>
+                            <th>Altrove</th>
+                            <th>Tel FO</th>
+                            <th>Tel CE</th>
+                            <th>Tel GPS</th>
+                            <th>Tel SIN</th>
+                            <th>Tel altro</th>
+                            <th>FRT</th>
+                            <th>Note</th>
+                          </tr>
+                      
                         </tfoot>					
                       </table>
                                            

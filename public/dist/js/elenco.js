@@ -22,12 +22,31 @@ function set_table(tipo) {
             }            
         }
     }
+    $('#tbl_articoli tfoot th').each(function () {
+        var title = $(this).text();
+		if (title.length!=0)
+			$(this).html('<input type="text" placeholder="Cerca ' + title + '" />');
+    });		    
     var table=$('#tbl_articoli').DataTable({
 		dom: 'lBfrtip',
         responsive:responsive   ,
         buttons: [
 			''
 		],		
+        initComplete: function () {
+            // Apply the search
+            this.api()
+                .columns()
+                .every(function () {
+                    var that = this;
+ 
+                    $('input', this.footer()).on('keyup change clear', function () {
+                        if (that.search() !== this.value) {
+                            that.search(this.value).draw();
+                        }
+                    });
+                });
+        },	        
         pagingType: 'full_numbers',
 		pageLength: 10,
 		lengthMenu: [10, 15, 20, 50, 100, 200, 500],
