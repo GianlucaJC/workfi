@@ -80,7 +80,7 @@
     <style>
       @media all and (max-width:768px){
         body {
-          font-size:0.5rem;
+          font-size:0.72rem;
         }
       }
     </style>
@@ -154,8 +154,11 @@
                               <tr id='tr{{$info->ID_anagr}}'>
                                   <td>
                                     <?php
-                                      if (isset($note[$info->posizione])) echo "<b>".$info->NOME."</b>";
-                                      else echo $info->NOME;
+                                      $nome_orig=$info->NOME;
+                                      $nominativo=$nome_orig;
+                                      if (strlen($nome_orig)>20) $nominativo=substr($nome_orig,0,18)."<br>".substr($nome_orig,19);
+                                      if (isset($note[$info->posizione])) echo "<b>".$nominativo."</b>";
+                                      else echo "<span title='$nome_orig'>$nominativo</span>";
                                     ?> 
                                   </td>
 
