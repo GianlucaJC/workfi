@@ -81,7 +81,7 @@ class mainController extends Controller
 		->first();
 		if (!isset($info)) return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');
 		$isadmin=$info->is_admin_workfi;
-
+echo "isadmin: $isadmin";
 		$user = session('id');
 	
 		$tipo_view=$request->input('tipo_view');
