@@ -30,10 +30,12 @@ function set_table(tipo) {
     var table=$('#tbl_articoli').DataTable({
 		dom: 'lBfrtip',
         responsive:responsive   ,
+        scrollX: true,
+        scrollY: 300,        
         columnDefs: [
-            { responsivePriority: 1, targets: 0 },
-            { responsivePriority: 2, targets: 1 }
-        ],        
+
+            { "width": "170px", "targets": [0,1] }
+        ],          
         buttons: [
 			''
 		],		
