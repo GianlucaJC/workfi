@@ -80,7 +80,7 @@
     <style>
       @media all and (max-width:768px){
         body {
-          font-size:0.73rem;
+          font-size:0.72rem;
         }
       }
     </style>
