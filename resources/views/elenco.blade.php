@@ -124,7 +124,7 @@
                       <table id='tbl_articoli' class="display nowrap">
                         <thead>
                           <tr>
-                            <th style='max-width:160px'>Nominativo</th>
+                            <th style='max-width:140px'>Nominativo</th>
                             <th>Scarico del</th>
                             <th>Stat</th>
                             <th>Azioni</th>
@@ -152,7 +152,7 @@
                             ?>
 
                               <tr id='tr{{$info->ID_anagr}}'>
-                                  <td style='max-width:160px'>
+                                  <td style='max-width:140px'>
                                     <?php
                                       $nome_orig=$info->NOME;
                                       $nominativo=$nome_orig;
