@@ -45,11 +45,16 @@ class mainController extends Controller
 			if (isset($info->ATTIVA)) {
 					if ($info->ATTIVA=="1") {
 						$user=$info->N_TESSERA;
+						$token=$info->token_laravel;
 						Session::put( 'id', $user);
 						Session::put( 'token', $token);
 						return $this->elenco($token);
-					} else {return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');}
-			} else {return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');}
+					} else {
+						return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');
+					}
+			} else {
+				return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');
+			}
 		} else return $this->elenco($token);
     }	
 
@@ -68,6 +73,7 @@ class mainController extends Controller
 
 	public function elenco($token) {
 		$request=Request();
+	
 
 		$info=DB::table('online.db')
 		->select("is_admin_workfi")
