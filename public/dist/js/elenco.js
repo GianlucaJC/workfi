@@ -31,7 +31,6 @@ function set_table(tipo) {
 		dom: 'lBfrtip',
         responsive:responsive   ,
         scrollX: true,
-        scrollY: 300,        
         columnDefs: [
 
             { "width": "100px", "targets": [0] },
