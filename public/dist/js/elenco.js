@@ -33,7 +33,7 @@ function set_table(tipo) {
         scrollX: true,
         columnDefs: [
 
-            { "width": "140px", "targets": [0] },
+            { "width": "100px", "targets": [0] },
             { "width": "60px", "targets": [1] }
         ],          
         buttons: [
