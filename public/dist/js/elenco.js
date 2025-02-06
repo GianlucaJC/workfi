@@ -34,7 +34,7 @@ function set_table(tipo) {
         scrollY: 300,        
         columnDefs: [
 
-            { "width": "170px", "targets": [0,1] }
+            { "width": "100px", "targets": [0,1] }
         ],          
         buttons: [
 			''
