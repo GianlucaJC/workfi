@@ -77,9 +77,16 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-
+    <style>
+      @media all and (max-width:768px){
+        body {
+          font-size:0.5rem;
+        }
+      }
+    </style>
 
     <body class="font-sans antialiased">
+
         <div class="min-h-screen bg-gray-100">
            
                 <header class="bg-white shadow">
@@ -118,9 +125,9 @@
                         <thead>
                           <tr>
                             <th>Nominativo</th>
+                            <th>Scarico del</th>
                             <th>Stat</th>
                             <th>Azioni</th>
-                            <th>Scarico del</th>
                             <th>Posizione</th>
                             <th>Funzionari assegnati</th>
                             <th>Nato a</th>
@@ -153,6 +160,13 @@
                                   </td>
 
                                   <td>
+                                    {{$info->data_scarico}}
+                                    <span id='id_ref{{$info->ID_anagr}}' 
+                                        data-nominativo='{{$info->NOME}}'
+                                    >
+                                  </td>                                  
+
+                                  <td>
                                     <?php
                                     
                                       if (array_key_exists($azienda_clean,$stat_azi)){
@@ -179,12 +193,7 @@
 
                                   </td> 
 
-                                  <td>
-                                    {{$info->data_scarico}}
-                                    <span id='id_ref{{$info->ID_anagr}}' 
-                                        data-nominativo='{{$info->NOME}}'
-                                    >
-                                  </td>
+
                                   <td>
                                      {{$info->posizione}}
                                   </td>
@@ -197,6 +206,7 @@
                                           if ($i>0) echo "<hr>";
                                           $id_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['id_assegnazione'];
                                           $id_funz=$elenco_assegnazioni[$azienda_clean][$i]['id_funzionario'];
+                                          $data_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['data_assegnazione'];
                               
                                           if (array_key_exists($id_funz,$funzionari)) {
                                             echo "<b>$id_funz</b>: ";
