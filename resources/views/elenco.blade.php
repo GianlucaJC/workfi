@@ -97,11 +97,16 @@
 
          <!-- Page Content -->
         <main>
-              
 
-              @if ($isadmin==1)     
-
+              @if ($isadmin==1 || 1==1)     
                 <div class="container-fluid mt-3">
+                <?php
+                  $txt="Operai";
+                  if ($op_az=="az") $txt="Aziende";
+                ?>
+                <button type="button" class="btn btn-primary btn-sm" onclick="set_opaz()">{{$txt}}</button>
+
+                <hr>
                 <!-- handle from Vue !-->
                 <div id="app">
                   <App></App>
@@ -111,6 +116,7 @@
                     <input type="hidden" value="{{url('/')}}" id="url" name="url">
                     <input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>	  
                     <input type='hidden' name='tipo_view' id='tipo_view' value='{{$tipo_view}}'>
+                    <input type='hidden' name='op_az' id='op_az' value='{{$op_az}}'>
 
                     <div id="div_table">
                       <div style="text-align: right;display:none" id='btn_espandi'> 
@@ -118,14 +124,17 @@
                           $out="";$txt="Espandi tutto";$value_e=1;
                           
                           if ($tipo_view=="1") {$out="outline-";$txt="Riduci";$value_e=0;}
+                          
                         ?>
                         <button type="button" class="btn btn-{{$out}}primary btn-sm" onclick="$('#tipo_view').val({{$value_e}});$('#frm_main').submit();">{{$txt}}</button>
                       </div>
+
+                      @if ($op_az=='op')
                       <table id='tbl_articoli' class="display nowrap">
                         <thead>
                           <tr>
                             <th>Nominativo</th>
-                            <th>Scarico del</th>
+                            <th>Data Ass</th>
                             <th>Stat</th>
                             <th>Azioni</th>
                             <th>Posizione</th>
@@ -149,6 +158,7 @@
                               $azienda=$info->DENOM;
                               $azienda_clean=str_replace("'","",$azienda);
                               $azienda_clean=str_replace('"',"",$azienda_clean);                          
+                              
                             ?>
 
                               <tr id='tr{{$info->ID_anagr}}'>
@@ -328,22 +338,70 @@
                       
                         </tfoot>					
                       </table>
-                                           
+                      @endif
+
+                      @if ($op_az=='az')
+                      <table id='tbl_articoli' class="display nowrap">
+                        <thead>
+                          <tr>
+                            <th>Azienda</th>
+                            <th>Data Ass</th>
+                            <th>Stat</th>
+                          </tr>
+                        </thead>  
+                        <tbody>
+                          @foreach($elenco as $info)                          
+                          <?php
+                              $azienda=$info->DENOM;
+                              $azienda_clean=str_replace("'","",$azienda);
+                              $azienda_clean=str_replace('"',"",$azienda_clean);                          
+                          ?>    
+                                                        
+                          <tr>
+                              <td>{{$info->DENOM}}</td>
+                              <td>
+                                  {{$info->data_scarico}}
+                                  <span id='id_ref{{$info->ID_anagr}}' 
+                                      data-nominativo='{{$info->NOME}}'
+                                  >
+                              </td>
+                                  </td>                                  
+
+                                  <td>
+                                    <?php
+                                    
+                                      if (array_key_exists($azienda_clean,$stat_azi)){
+                                        if (isset($stat_azi[$azienda_clean]['liberi']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #FFD43B;'> <small>".$stat_azi[$azienda_clean]['liberi']."</small></i> ";
+                                        if (isset($stat_azi[$azienda_clean]['filca']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #63E6BE;'> <small>".$stat_azi[$azienda_clean]['filca']."</small></i> ";
+                                        if (isset($stat_azi[$azienda_clean]['feneal']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #74C0FC;'> <small>".$stat_azi[$azienda_clean]['feneal']."</small></i> ";
+                                        if (isset($stat_azi[$azienda_clean]['fillea']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #FF0000;'> <small>".$stat_azi[$azienda_clean]['fillea']."</small></i> ";
+                                        if (isset($stat_azi[$azienda_clean]['n_spec']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #ccccd1;'> <small>".$stat_azi[$azienda_clean]['n_spec']."</small></i> ";
+                                      }
+                                    ?> 
+                                  </td>                     
+
+                          </tr>
+                          @endforeach
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Nominativo</th>
+                            <th>Data Ass</th>
+                            <th>Stat</th>
+                          </tr>                          
+                        </tfoot>
+                      </table> 
+                      @endif            
                     </div>  
                 </form>    
 
               @endif 
-              
-              @if($isadmin==0) 
-                  <div class="jumbotron mt-3">
-                    <h1 class="display-4">Attenzione</h1>
-                    <p class="lead">Non hai accesso a questa pagina con il tuo livello di utenza</p>
-                    <hr class="my-4">
-                    <p class="lead mt-2">
-                      <a class="btn btn-primary btn-lg" href="{{ route('elenco_libri') }}" role="button">Home page</a>
-                    </p>
-                  </div>
-              @endif
+
           </div>
        
 

@@ -101,4 +101,10 @@ function elimina(id_libro) {
     })       
 }
 
+function set_opaz() {
+    current=$("#op_az").val()
+    if (current=="op") $("#op_az").val('az')
+    else $("#op_az").val('op')
+    $('#frm_main').submit();
+}
 

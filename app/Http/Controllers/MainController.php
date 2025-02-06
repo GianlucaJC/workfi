@@ -34,20 +34,23 @@ class mainController extends Controller
 	  //$token = bin2hex(random_bytes(16)); 
 	  //echo $token;
 	    $user=Session::get( 'id');
+		if (strlen($token)==0) $token=Session::get( 'token');
+		$info=DB::table('online.db')
+		->select("N_TESSERA","ATTIVA","PIN")
+		->where('token_laravel','=',$token)
+		->first();
 	  	if (!isset($user) || strlen($user)==0) {
-			$info=DB::table('online.db')
-			->select("N_TESSERA","ATTIVA","PIN",)
-			->where('token_laravel','=',$token)
-			->first();
+
 
 			if (isset($info->ATTIVA)) {
 					if ($info->ATTIVA=="1") {
 						$user=$info->N_TESSERA;
 						Session::put( 'id', $user);
-						return $this->elenco();
+						Session::put( 'token', $token);
+						return $this->elenco($token);
 					} else {return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');}
 			} else {return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');}
-		} else return $this->elenco();
+		} else return $this->elenco($token);
     }	
 
 	public function note() {
@@ -63,14 +66,47 @@ class mainController extends Controller
 
 	}
 
-	public function elenco() {
+	public function elenco($token) {
 		$request=Request();
+
+		$info=DB::table('online.db')
+		->select("is_admin_workfi")
+		->where('token_laravel','=',$token)
+		->first();
+		if (!isset($info)) return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');
+		$isadmin=$info->is_admin_workfi;
+
+		$user = session('id');
+	
 		$tipo_view=$request->input('tipo_view');
 		if (strlen($tipo_view)==0) $tipo_view="0";
-		$elenco=DB::table('anagrafe.t2_tosc_a')
-		->select("*")
-		->whereNotNull('id_import')
-		->get();
+		$op_az=$request->input('op_az');
+		if (strlen($op_az)==0) $op_az="op";
+
+		$arr_user=array();
+		if ($isadmin!=1) {
+			$arr_user=$this->elenco_assegnazioni($user);
+		}
+
+		if ($op_az=='az')  {
+			$elenco=DB::table('anagrafe.t2_tosc_a')
+			->select("*")
+			->when($isadmin!=1, function ($elenco) use($arr_user){			
+				return $elenco->whereIn('denom',$arr_user);
+			})
+			->whereNotNull('id_import')
+			->groupBy('denom')
+			->get();			
+		}
+		else {
+			$elenco=DB::table('anagrafe.t2_tosc_a')
+			->select("*")
+			->when($isadmin!=1, function ($elenco) use($arr_user){			
+				return $elenco->whereIn('denom',$arr_user);
+			})
+			->whereNotNull('id_import')
+			->get();
+		}
 		
 
 		$info_altrove=array();
@@ -98,15 +134,14 @@ class mainController extends Controller
 
 		$note=$this->note();
 		$funzionari=$this->funzionari();
-		$elenco_assegnazioni=$this->elenco_assegnazioni();
+		$elenco_assegnazioni=$this->elenco_assegnazioni('all');
 		$stat_azi=$this->stat_azi();
-		$isadmin=1;
-		$user = session('id');
+
 		
 		$solo_pref=1;
 	
 
-		return view('elenco',compact('elenco','isadmin','user','solo_pref','tipo_view','note','funzionari','elenco_assegnazioni','stat_azi','info_altrove'));
+		return view('elenco',compact('elenco','isadmin','user','solo_pref','tipo_view','op_az','note','funzionari','elenco_assegnazioni','stat_azi','info_altrove'));
 
    }	
 
@@ -122,13 +157,16 @@ class mainController extends Controller
 		return $res;	
    }
 
-   public function elenco_assegnazioni() {
+   public function elenco_assegnazioni($from) {
 		$res=array();$sca=0;$old="?";
 
 		$elenco=DB::table('bsfi.aziende_workfi')
 		->select("id","denom as azienda",'id_funzionario','data_assegnazione')
+		->when($from!='all', function ($elenco) use($from){			
+			return $elenco->where('id_funzionario','=',$from);
+		})
 		->get();
-
+		$res2=array();
 		foreach($elenco as $risposta) {
 			$azienda=$risposta->azienda;
 			if ($old!=$azienda) {
@@ -137,13 +175,18 @@ class mainController extends Controller
 			$id_assegnazione=$risposta->id;
 			$id_funzionario=$risposta->id_funzionario;
 			$data_assegnazione=$risposta->data_assegnazione;
+			$res2[]=$azienda;
+
 			$azienda=str_replace("'","",$azienda);
 			$azienda=str_replace('"',"",$azienda);
 			$res[$azienda][$sca]['id_funzionario']=$id_funzionario;
 			$res[$azienda][$sca]['id_assegnazione']=$id_assegnazione;
 			$res[$azienda][$sca]['data_assegnazione']=$data_assegnazione;
+
+			
 			$sca++;
 		}
+		if ($from!="all") return $res2;
 
 		return $res;	
 	
