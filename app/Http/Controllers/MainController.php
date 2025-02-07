@@ -87,7 +87,7 @@ class mainController extends Controller
 		if ($count==0) {
 			return $this->redirect_url();
 		}
-		$info=DB::table('online.db')->select("is_admin_workfi")->where('token_laravel','=',$token)->get();
+		$info=DB::table('online.db')->select("is_admin_workfi")->where('token_laravel','=',$token)->first();
 		$isadmin=$info->is_admin_workfi;
 
 		$user=$request->session()->get('id');
