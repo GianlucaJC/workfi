@@ -358,7 +358,15 @@
                           ?>    
                                                         
                           <tr>
-                              <td>{{$info->DENOM}}</td>
+                              <td>
+                                <?php
+                                    $azienda_view=$azienda;
+                                    if (strlen($azienda)>20) $azienda_view=substr($azienda,0,18)."<br>".substr($azienda,19);
+                                    echo "<span title='$azienda_view'>$azienda_view</span>";                                
+                                ?>
+                                
+
+                              </td>
                               <td>
                                   {{$info->data_scarico}}
                                   <span id='id_ref{{$info->ID_anagr}}' 
@@ -367,7 +375,7 @@
                               </td>
                                   </td>                                  
 
-                                  <td>
+                                  <td style='text-align:left'>
                                     <?php
                                     
                                       if (array_key_exists($azienda_clean,$stat_azi)){
