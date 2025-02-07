@@ -26,3 +26,5 @@ Route::post('/elenco}', [ 'as' => 'elenco', 'uses' => 'App\Http\Controllers\Main
 
 Route::post('register_push', [ 'as' => 'register_push', 'uses' => 'App\Http\Controllers\ApiController@register_push']);
 Route::get('register_push', [ 'as' => 'register_push', 'uses' => 'App\Http\Controllers\ApiController@register_push']);
+
+Route::post('lav_from_azienda', [ 'as' => 'lav_from_azienda', 'uses' => 'App\Http\Controllers\MainController@lav_from_azienda']);

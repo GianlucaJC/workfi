@@ -341,6 +341,8 @@
                       @endif
 
                       @if ($op_az=='az')
+
+                      <div id='div_aziende'>
                       <table id='tbl_articoli' class="display nowrap">
                         <thead>
                           <tr>
@@ -361,8 +363,13 @@
                               <td>
                                 <?php
                                     $azienda_view=$azienda;
+                                    $azienda_js=str_replace("'","[",$azienda);
+                                    $azienda_js=str_replace("&","^",$azienda_js);
                                     if (strlen($azienda)>20) $azienda_view=substr($azienda,0,18)."<br>".substr($azienda,19);
-                                    echo "<span title='$azienda_view'>$azienda_view</span>";                                
+                                    echo "<a href='javascript:void(0)' onclick=\"view_lav('$azienda_js')\">
+                                           <span title='$azienda_view'>$azienda_view</span>
+                                          </a>";
+                                   
                                 ?>
                                 
 
@@ -404,6 +411,10 @@
                           </tr>                          
                         </tfoot>
                       </table> 
+                      </div>
+
+                      <div id='div_lav' style='display:none'>
+                      </div>
                       @endif            
                     </div>  
                 </form>    

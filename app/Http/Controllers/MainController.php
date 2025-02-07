@@ -257,4 +257,16 @@ class mainController extends Controller
 
 	}
 
+	public function lav_from_azienda(Request $request){		
+		$azienda=$request->input('azienda');
+		$azienda=str_replace("[","'",$azienda);
+		$azienda=str_replace("^","&",$azienda);
+		$elenco=DB::table('anagrafe.t2_tosc_a')
+		->select("*")
+		->where("denom",'=',$azienda)
+		->get();
+		return json_encode($elenco);		
+
+	}
+
 }
