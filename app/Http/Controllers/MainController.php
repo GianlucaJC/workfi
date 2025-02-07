@@ -7,7 +7,7 @@ use Route;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Session;
+
 
 
 use DB;
@@ -36,31 +36,34 @@ class mainController extends Controller
 
 
     public function main($token=""){
-	  //$token = bin2hex(random_bytes(16)); 
-	  //echo $token;
-	    $user=Session::get( 'id');
-		if (strlen($token)==0) $token=Session::get( 'token');
+		$request=Request();
+	  	//$token = bin2hex(random_bytes(16)); 
+	  	//echo $token;
+		  
 		if (strlen($token)==0) {
-			return redirect()->away($this->redirect);
+			if ($request->session()->has('token')) $token=$request->session()->get('token');
 		}
+
+		
+		if (strlen($token)==0) return $this->redirect_url();
+		
 
 		$info=DB::table('online.db')
 		->select("N_TESSERA","ATTIVA","PIN")
 		->where('token_laravel','=',$token)
 		->first();
-	  	if (!isset($user) || strlen($user)==0) {
-
+	  	if (!($request->session()->has('id'))) {
 			if (isset($info->ATTIVA)) {
 					if ($info->ATTIVA=="1") {
 						$user=$info->N_TESSERA;
-						Session::put( 'id', $user);
-						Session::put( 'token', $token);
+						$request->session()->put('id',$user);
+						$request->session()->put('token',$token);
 						return $this->elenco($token);
 					} else {
-						return redirect()->away($this->redirect);
+						return $this->redirect_url();
 					}
 			} else {
-				return redirect()->away($this->redirect);
+				return $this->redirect_url();
 			}
 		} else return $this->elenco($token);
     }	
@@ -80,18 +83,14 @@ class mainController extends Controller
 
 	public function elenco($token) {
 		$request=Request();
-	
-
-		$info=DB::table('online.db')
-		->select("is_admin_workfi")
-		->where('token_laravel','=',$token)
-		->first();
-		if (!isset($info)) {
-			return redirect()->away($this->redirect);
+		$count=DB::table('online.db')->select("is_admin_workfi")->where('token_laravel','=',$token)->count();
+		if ($count==0) {
+			return $this->redirect_url();
 		}
+		$info=DB::table('online.db')->select("is_admin_workfi")->where('token_laravel','=',$token)->get();
 		$isadmin=$info->is_admin_workfi;
 
-		$user = session('id');
+		$user=$request->session()->get('id');
 	
 		$tipo_view=$request->input('tipo_view');
 		if (strlen($tipo_view)==0) $tipo_view="0";
@@ -271,6 +270,14 @@ class mainController extends Controller
 		->get();
 		return json_encode($elenco);		
 
+	}
+
+	public function redirect_url() {
+		$request=Request();
+		$request->session()->forget('id');
+		$request->session()->forget('token');
+
+		return redirect()->away($this->redirect);		
 	}
 
 }
