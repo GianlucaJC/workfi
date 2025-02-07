@@ -16,6 +16,11 @@ use DB;
 class mainController extends Controller
 {
 	public function __construct(){
+		
+		//per login rapido prendere il login_laravel in online.db nella relativa tessera di accesso
+		$this->redirect="https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1";
+		
+		//$this->redirect="https://localhost/homeFO/enter/index.php?workfi=1";
 		/*
 		$this->middleware(function ($request, $next){
 			$current_route=Route::current()->getName();
@@ -41,19 +46,17 @@ class mainController extends Controller
 		->first();
 	  	if (!isset($user) || strlen($user)==0) {
 
-
 			if (isset($info->ATTIVA)) {
 					if ($info->ATTIVA=="1") {
 						$user=$info->N_TESSERA;
-						$token=$info->token_laravel;
 						Session::put( 'id', $user);
 						Session::put( 'token', $token);
 						return $this->elenco($token);
 					} else {
-						return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');
+						return redirect()->away($this->redirect);
 					}
 			} else {
-				return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');
+				return redirect()->away($this->redirect);
 			}
 		} else return $this->elenco($token);
     }	
@@ -79,7 +82,9 @@ class mainController extends Controller
 		->select("is_admin_workfi")
 		->where('token_laravel','=',$token)
 		->first();
-		if (!isset($info)) return redirect()->away('https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1');
+		if (!isset($info)) {
+			return redirect()->away($this->redirect);
+		}
 		$isadmin=$info->is_admin_workfi;
 
 		$user = session('id');
