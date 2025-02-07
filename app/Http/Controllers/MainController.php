@@ -18,7 +18,7 @@ class mainController extends Controller
 	public function __construct(){
 		
 		//per login rapido prendere il login_laravel in online.db nella relativa tessera di accesso
-		$this->redirect="https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1";
+		$this->redirect="https://www.filleaoffice.it/homeFO/index.php?workfi=1";
 		
 		//$this->redirect="https://localhost/homeFO/enter/index.php?workfi=1";
 		/*
@@ -43,7 +43,7 @@ class mainController extends Controller
 		if (strlen($token)==0) {
 			return redirect()->away($this->redirect);
 		}
-		
+
 		$info=DB::table('online.db')
 		->select("N_TESSERA","ATTIVA","PIN")
 		->where('token_laravel','=',$token)
