@@ -40,6 +40,10 @@ class mainController extends Controller
 	  //echo $token;
 	    $user=Session::get( 'id');
 		if (strlen($token)==0) $token=Session::get( 'token');
+		if (strlen($token)==0) {
+			return redirect()->away($this->redirect);
+		}
+		
 		$info=DB::table('online.db')
 		->select("N_TESSERA","ATTIVA","PIN")
 		->where('token_laravel','=',$token)
