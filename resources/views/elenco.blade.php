@@ -105,11 +105,12 @@
                   if ($op_az=="az") $txt="Aziende";
                 ?>
                 <button type="button" class="btn btn-primary btn-sm" onclick="set_opaz()">{{$txt}}</button>
+                <span class='ml-2'>Notifiche</span>
                 <a href="https://wa.me/+14155238886?text=join stone-month">
-                  <button type="button" class="btn btn-success btn-sm ml-2"><i class="fab fa-whatsapp"></i> Abilita Notifiche</button>
+                  <button type="button" class="btn btn-success btn-sm ml-2"><i class="fab fa-whatsapp"></i> Attiva</button>
                 </a>
                 <a href="https://wa.me/+14155238886?text=stop">
-                  <button type="button" class="btn btn-warning btn-sm ml-2"><i class="fab fa-whatsapp"></i> Disabilita Notifiche</button>
+                  <button type="button" class="btn btn-warning btn-sm ml-2"><i class="fab fa-whatsapp"></i> Disabilita</button>
                 </a>
                 
 
