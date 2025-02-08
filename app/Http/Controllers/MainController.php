@@ -52,7 +52,10 @@ class mainController extends Controller
 		->select("N_TESSERA","ATTIVA","PIN")
 		->where('token_laravel','=',$token)
 		->first();
-	  	if (!($request->session()->has('id'))) {
+		
+		//BUG:in caso di token non valido ma con sessione ancora in corso si autentica!!
+	  	
+		if (!($request->session()->has('id'))) {
 			if (isset($info->ATTIVA)) {
 					if ($info->ATTIVA=="1") {
 						$user=$info->N_TESSERA;

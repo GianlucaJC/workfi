@@ -354,6 +354,7 @@
                         <tbody>
                           @foreach($elenco as $info)                          
                           <?php
+                              $p_iva=$info->C2;
                               $azienda=$info->DENOM;
                               $azienda_clean=str_replace("'","",$azienda);
                               $azienda_clean=str_replace('"',"",$azienda_clean);                          
@@ -366,9 +367,15 @@
                                     $azienda_js=str_replace("'","[",$azienda);
                                     $azienda_js=str_replace("&","^",$azienda_js);
                                     if (strlen($azienda)>20) $azienda_view=substr($azienda,0,18)."<br>".substr($azienda,19);
+                                    if (strlen($p_iva)!=0)
+                                      echo "<a href='https://www.filleaoffice.it/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&p_iva=".$p_iva."' target='_blank'>$azienda</a>";      
+                                    else
+                                       echo "<a href='https://www.filleaoffice.it/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&azienda=".$azienda."' target='_blank'>$azienda</a>";      
+                                    /*
                                     echo "<a href='javascript:void(0)' onclick=\"view_lav('$azienda_js')\">
                                            <span title='$azienda_view'>$azienda_view</span>
                                           </a>";
+                                    */      
                                    
                                 ?>
                                 

@@ -107,6 +107,8 @@ function set_opaz() {
     else $("#op_az").val('op')
     $('#frm_main').submit();
 }
+
+//function disabilitata a favore della nuova consultazione anagrafe (passo i parametri in $_get...valutare $_post per problemi escape)
 function view_lav(azienda) {
     $("#div_lav").empty();
     const metaElements = document.querySelectorAll('meta[name="csrf-token"]');
