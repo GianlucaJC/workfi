@@ -18,20 +18,9 @@ class mainController extends Controller
 	public function __construct(){
 		
 		//per login rapido prendere il login_laravel in online.db nella relativa tessera di accesso
-		$this->redirect="https://www.filleaoffice.it/homeFO/index.php?workfi=1";
+		//$this->redirect="https://www.filleaoffice.it/homeFO/index.php?workfi=1";
 		
-		//$this->redirect="https://localhost/homeFO/enter/index.php?workfi=1";
-		/*
-		$this->middleware(function ($request, $next){
-			$current_route=Route::current()->getName();
-			return $next($request);
-			if ($current_route!="main") {
-				$user = session('id');
-				if (!$user || strlen($user)==0) $this->login=false;
-				return $next($request);
-			}
-		});
-		*/
+		$this->redirect="https://localhost/homeFO/enter/index.php?workfi=1";
 	}	
 
 
@@ -42,6 +31,14 @@ class mainController extends Controller
 		  
 		if (strlen($token)==0) {
 			if ($request->session()->has('token')) $token=$request->session()->get('token');
+		} else {
+			//in caso di token inviato e diverso dalla sessione in corso ->redirect!
+			if ($request->session()->has('token')) {
+				$token_s=$request->session()->get('token');
+				if ($token_s!=$token) {
+					return $this->redirect_url();
+				}
+			}
 		}
 
 		

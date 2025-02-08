@@ -155,6 +155,7 @@
                         <tbody>
                           @foreach($elenco as $info)
                             <?php
+                              $p_iva=$info->C2;
                               $azienda=$info->DENOM;
                               $azienda_clean=str_replace("'","",$azienda);
                               $azienda_clean=str_replace('"',"",$azienda_clean);                          
@@ -236,7 +237,13 @@
                                      {{date('d-m-Y', strtotime($info->DATANASC));}}
                                   </td>                                  
                                   <td>
-                                      {{$info->DENOM}}
+                                      
+                                      <?php
+                                      if (strlen($p_iva)!=0)
+                                      echo "<a href='https://www.filleaoffice.it/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&p_iva=".$p_iva."' target='_blank'>$azienda</a>";      
+                                    else
+                                       echo "<a href='https://www.filleaoffice.it/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&azienda=".$azienda."' target='_blank'>$azienda</a>";   
+                                      ?>                                         
                                   </td>
                                   <td>
                                     <?php
