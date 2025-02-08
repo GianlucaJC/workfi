@@ -17,10 +17,12 @@ class mainController extends Controller
 {
 	public function __construct(){
 		
-		//per login rapido prendere il login_laravel in online.db nella relativa tessera di accesso
+		/*
+			per login rapido prendere il login_laravel in online.db nella relativa tessera di accesso
+			ed appenderlo alla url di workfi es:
+			in locale: http://localhost:8012/workfi/public/main/81de27c50e806b9477edb63f45124108
+		*/
 		$this->redirect="https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1";
-		
-		//$this->redirect="https://localhost/homeFO/enter/index.php?workfi=1";
 	}	
 
 

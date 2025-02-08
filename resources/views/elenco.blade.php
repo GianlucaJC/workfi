@@ -105,6 +105,13 @@
                   if ($op_az=="az") $txt="Aziende";
                 ?>
                 <button type="button" class="btn btn-primary btn-sm" onclick="set_opaz()">{{$txt}}</button>
+                <a href="https://wa.me/+14155238886?text=join stone-month">
+                  <button type="button" class="btn btn-success btn-sm ml-2"><i class="fab fa-whatsapp"></i> Abilita Notifiche</button>
+                </a>
+                <a href="https://wa.me/+14155238886?text=stop">
+                  <button type="button" class="btn btn-warning btn-sm ml-2"><i class="fab fa-whatsapp"></i> Disabilita Notifiche</button>
+                </a>
+                
 
                 <hr>
                 <!-- handle from Vue !-->
