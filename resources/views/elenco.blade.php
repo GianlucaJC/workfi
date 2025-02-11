@@ -322,7 +322,10 @@
                                             for ($sca=0;$sca<count($note[$info->posizione]);$sca++) {
                                               $view.="<tr>";
                                                 $view.="<td>";
-                                                  $view.=$note[$info->posizione][$sca]->id_user;
+                                                  $id_funz=$note[$info->posizione][$sca]->id_user;
+                                                  //$view.=$id_funz;
+                                                  if (array_key_exists($id_funz,$funzionari)) 
+                                                    $view.=$funzionari[$id_funz];
                                                 $view.="</td>";
                                                 $view.="<td>";
                                                   $view.=$note[$info->posizione][$sca]->created_at;
