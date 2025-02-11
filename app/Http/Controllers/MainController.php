@@ -177,7 +177,7 @@ class mainController extends Controller
 		$res=array();$sca=0;$old="?";
 
 		$elenco=DB::table('bsfi.aziende_workfi')
-		->select("id","denom as azienda",'id_funzionario','data_assegnazione')
+		->select("id","denom as azienda",'id_funzionario','stat_azi_before','data_assegnazione')
 		->when($from!='all', function ($elenco) use($from){			
 			return $elenco->where('id_funzionario','=',$from);
 		})
@@ -191,12 +191,14 @@ class mainController extends Controller
 			$id_assegnazione=$risposta->id;
 			$id_funzionario=$risposta->id_funzionario;
 			$data_assegnazione=$risposta->data_assegnazione;
+			$stat_azi_before=$risposta->stat_azi_before;
 			$res2[]=$azienda;
 
 			$azienda=str_replace("'","",$azienda);
 			$azienda=str_replace('"',"",$azienda);
 			$res[$azienda][$sca]['id_funzionario']=$id_funzionario;
 			$res[$azienda][$sca]['id_assegnazione']=$id_assegnazione;
+			$res[$azienda][$sca]['stat_azi_before']=$stat_azi_before;
 			$res[$azienda][$sca]['data_assegnazione']=$data_assegnazione;
 
 			
@@ -256,6 +258,8 @@ class mainController extends Controller
 			if ($feneal>0) $res[$azienda_clean]['feneal']=$feneal;
 			if ($fillea>0) $res[$azienda_clean]['fillea']=$fillea;
 			if ($n_spec>0) $res[$azienda_clean]['n_spec']=$n_spec;
+
+
 			
 		}
 		return $res;

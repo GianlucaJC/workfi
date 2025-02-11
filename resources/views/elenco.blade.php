@@ -190,19 +190,44 @@
 
                                   <td>
                                     <?php
+
                                     
                                       if (array_key_exists($azienda_clean,$stat_azi)){
                                         if (isset($stat_azi[$azienda_clean]['liberi']))
                                           echo "<i class='fas fa-square fa-sm' style='color: #FFD43B;'> <small>".$stat_azi[$azienda_clean]['liberi']."</small></i> ";
+                                        if (isset($stat_azi[$azienda_clean]['fillea']))
+                                          echo "<i class='fas fa-square fa-sm' style='color: #FF0000;'> <small>".$stat_azi[$azienda_clean]['fillea']."</small></i> ";                                        
                                         if (isset($stat_azi[$azienda_clean]['filca']))
                                           echo "<i class='fas fa-square fa-sm' style='color: #63E6BE;'> <small>".$stat_azi[$azienda_clean]['filca']."</small></i> ";
                                         if (isset($stat_azi[$azienda_clean]['feneal']))
                                           echo "<i class='fas fa-square fa-sm' style='color: #74C0FC;'> <small>".$stat_azi[$azienda_clean]['feneal']."</small></i> ";
-                                        if (isset($stat_azi[$azienda_clean]['fillea']))
-                                          echo "<i class='fas fa-square fa-sm' style='color: #FF0000;'> <small>".$stat_azi[$azienda_clean]['fillea']."</small></i> ";
                                         if (isset($stat_azi[$azienda_clean]['n_spec']))
                                           echo "<i class='fas fa-square fa-sm' style='color: #ccccd1;'> <small>".$stat_azi[$azienda_clean]['n_spec']."</small></i> ";
-                                      }
+                                      
+                                        if (array_key_exists($azienda_clean,$elenco_assegnazioni)) {
+                                          $stat_azi_before=$elenco_assegnazioni[$azienda_clean][0]['stat_azi_before'];
+                                          
+                                          $info_before=explode(";",$stat_azi_before);
+                                          if (strlen($stat_azi_before)!=0) {
+                                            echo "<hr>";
+                                            if ($info_before[0]!="0")
+                                                echo "<i class='fas fa-square fa-sm' style='color: #FFD43B;'> <small>".$info_before[0]."</small></i> ";
+                                            
+                                            if ($info_before[1]!="0")
+                                                echo "<i class='fas fa-square fa-sm' style='color: #FF0000;'> <small>".$info_before[1]."</small></i> ";
+
+                                            if ($info_before[2]!="0")
+                                                echo "<i class='fas fa-square fa-sm' style='color: #63E6BE;'> <small>".$info_before[2]."</small></i> ";
+
+                                            if ($info_before[3]!="0")
+                                                echo "<i class='fas fa-square fa-sm' style='color: #74C0FC;'> <small>".$info_before[3]."</small></i> ";
+
+                                            if ($info_before[4]!="0")
+                                                echo "<i class='fas fa-square fa-sm' style='color: #ccccd1;'> <small>".$info_before[4]."</small></i> ";                                        
+
+                                          }   
+                                        }
+                                     }                                   
                                     ?> 
                                   </td>
 
