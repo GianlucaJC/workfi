@@ -24,6 +24,17 @@
 
         <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
+        <style>
+          table{
+            margin: 0 auto;
+            width: 100%;
+            clear: both;
+            border-collapse: collapse;
+            table-layout: fixed; // ***********add this
+            word-wrap:break-word; // ***********and this
+          }
+        </style>
+
         <script>
 
           window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -80,7 +91,7 @@
     <style>
       @media all and (max-width:768px){
         body {
-          font-size:0.7rem;
+          font-size:0.64rem;
         }
       }
     </style>
@@ -120,7 +131,7 @@
                   <App></App>
                 </div>    
 
-                <form method='post' action="{{ route('main') }}" id='frm_main' name='frm_main' autocomplete="off">
+                <form method='POST' action="{{ route('main', [$token,$dataass]) }}" id='frm_main' name='frm_main' autocomplete="off">
                     <input type="hidden" value="{{url('/')}}" id="url" name="url">
                     <input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>	  
                     <input type='hidden' name='tipo_view' id='tipo_view' value='{{$tipo_view}}'>
@@ -175,9 +186,10 @@
                                     <?php
                                       $nome_orig=$info->NOME;
                                       $nominativo=$nome_orig;
-                                      if (strlen($nome_orig)>20) $nominativo=substr($nome_orig,0,18)."<br>".substr($nome_orig,19);
+                                      if (strlen($nome_orig)>18) $nominativo=substr($nome_orig,0,18)."<br>".substr($nome_orig,19);
                                       if (isset($note[$info->posizione])) echo "<b>".$nominativo."</b>";
                                       else echo "<span title='$nome_orig'>$nominativo</span>";
+                                      
                                     ?> 
                                   </td>
 
@@ -348,6 +360,7 @@
                                           </tbody>  
                                         </table>';
                                         echo $view;
+                                        
 
                                       }
                                     ?>

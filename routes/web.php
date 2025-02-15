@@ -17,8 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/main/{token?}', [ 'as' => 'main', 'uses' => 'App\Http\Controllers\MainController@main']);
-Route::post('/main/{token?}', [ 'as' => 'main', 'uses' => 'App\Http\Controllers\MainController@main']);
+Route::get('/main/{token?}/{dataass?}', [ 'as' => 'main', 'uses' => 'App\Http\Controllers\MainController@main']);
+Route::post('/main/{token?}/{dataass?}', [ 'as' => 'main', 'uses' => 'App\Http\Controllers\MainController@main']);
 
 
 Route::post('save_nota', 'App\Http\Controllers\AjaxController@save_nota');

@@ -26,7 +26,7 @@ class mainController extends Controller
 	}	
 
 
-    public function main($token=""){
+    public function main($token="",$dataass=""){
 		$request=Request();
 	  	//$token = bin2hex(random_bytes(16)); 
 	  	//echo $token;
@@ -52,7 +52,7 @@ class mainController extends Controller
 		->where('token_laravel','=',$token)
 		->first();
 		
-		//BUG:in caso di token non valido ma con sessione ancora in corso si autentica!!
+		
 	  	
 		if (!($request->session()->has('id'))) {
 			if (isset($info->ATTIVA)) {
@@ -60,14 +60,14 @@ class mainController extends Controller
 						$user=$info->N_TESSERA;
 						$request->session()->put('id',$user);
 						$request->session()->put('token',$token);
-						return $this->elenco($token);
+						return $this->elenco($token,$dataass);
 					} else {
 						return $this->redirect_url();
 					}
 			} else {
 				return $this->redirect_url();
 			}
-		} else return $this->elenco($token);
+		} else return $this->elenco($token,$dataass);
     }	
 
 	public function note() {
@@ -83,7 +83,7 @@ class mainController extends Controller
 
 	}
 
-	public function elenco($token) {
+	public function elenco($token,$dataass) {
 		$request=Request();
 		$count=DB::table('online.db')->select("is_admin_workfi")->where('token_laravel','=',$token)->count();
 		if ($count==0) {
@@ -103,6 +103,9 @@ class mainController extends Controller
 		if ($isadmin!=1) {
 			$arr_user=$this->elenco_assegnazioni($user);
 		}
+		$data_sca="";
+		if (strlen($dataass)==8) 
+			$data_sca=substr($dataass,0,4)."-".substr($dataass,4,2)."-".substr($dataass,6,2);
 
 		if ($op_az=='az')  {
 			$elenco=DB::table('anagrafe.t2_tosc_a')
@@ -110,6 +113,9 @@ class mainController extends Controller
 			->when($isadmin!=1, function ($elenco) use($arr_user){			
 				return $elenco->whereIn('denom',$arr_user);
 			})
+			->when(strlen($data_sca)==10, function ($elenco) use($data_sca){			
+				return $elenco->where('data_scarico',$data_sca);
+			})			
 			->whereNotNull('id_import')
 			->groupBy('denom')
 			->get();			
@@ -119,6 +125,9 @@ class mainController extends Controller
 			->select("*")
 			->when($isadmin!=1, function ($elenco) use($arr_user){			
 				return $elenco->whereIn('denom',$arr_user);
+			})
+			->when(strlen($data_sca)==10, function ($elenco) use($data_sca){			
+				return $elenco->where('data_scarico',$data_sca);
 			})
 			->whereNotNull('id_import')
 			->get();
@@ -157,7 +166,7 @@ class mainController extends Controller
 		$solo_pref=1;
 	
 
-		return view('elenco',compact('elenco','isadmin','user','solo_pref','tipo_view','op_az','note','funzionari','elenco_assegnazioni','stat_azi','info_altrove'));
+		return view('elenco',compact('token','dataass','elenco','isadmin','user','solo_pref','tipo_view','op_az','note','funzionari','elenco_assegnazioni','stat_azi','info_altrove'));
 
    }	
 

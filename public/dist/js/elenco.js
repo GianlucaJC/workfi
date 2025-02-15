@@ -1,8 +1,11 @@
+ismobile=false
 $(document).ready( function () {
     if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+        ismobile=true
         // true for mobile device
        $("#btn_espandi").show()
       }else{
+        ismobile=false
         // false for not mobile device
         $("#btn_espandi").hide()
      }
@@ -27,14 +30,17 @@ function set_table(tipo,id_tb) {
 		if (title.length!=0)
 			$(this).html('<input type="text" placeholder="Cerca ' + title + '" />');
     });		    
+    w="25rem"
+    if (ismobile==true) w="8rem"
+    
     var table=$('#'+id_tb).DataTable({
 		dom: 'lBfrtip',
         responsive:responsive   ,
         scrollX: true,
         columnDefs: [
 
-            { "width": "100px", "targets": [0] },
-            { "width": "60px", "targets": [1] }
+            { "width": w, "targets": [0] },
+           // { "width": "1rem", "targets": [1] }
         ],          
         buttons: [
 			''
