@@ -31,7 +31,7 @@ function set_table(tipo,id_tb) {
 			$(this).html('<input type="text" placeholder="Cerca ' + title + '" />');
     });		    
     w="25rem"
-    if (ismobile==true) w="8rem"
+    if (ismobile==true) w="11rem"
     
     var table=$('#'+id_tb).DataTable({
 		dom: 'lBfrtip',
