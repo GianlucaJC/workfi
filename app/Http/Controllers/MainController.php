@@ -30,7 +30,9 @@ class mainController extends Controller
 		$request=Request();
 	  	//$token = bin2hex(random_bytes(16)); 
 	  	//echo $token;
-		  
+
+
+		/*
 		if (strlen($token)==0) {
 			if ($request->session()->has('token')) $token=$request->session()->get('token');
 		} else {
@@ -42,6 +44,7 @@ class mainController extends Controller
 				}
 			}
 		}
+		*/
 
 		
 		if (strlen($token)==0) return $this->redirect_url();
