@@ -93,8 +93,10 @@ class mainController extends Controller
 		$info=DB::table('online.db')->select("is_admin_workfi")->where('token_laravel','=',$token)->first();
 		$isadmin=$info->is_admin_workfi;
 
+
 		$user=$request->session()->get('id');
-	
+		$filtro_note=$request->input('filtro_note');
+		
 		$tipo_view=$request->input('tipo_view');
 		if (strlen($tipo_view)==0) $tipo_view="0";
 		$op_az=$request->input('op_az');
@@ -116,7 +118,7 @@ class mainController extends Controller
 			})
 			->when(strlen($data_sca)==10, function ($elenco) use($data_sca){			
 				return $elenco->where('data_scarico',$data_sca);
-			})			
+			})	
 			->whereNotNull('id_import')
 			->groupBy('denom')
 			->get();			
@@ -129,6 +131,9 @@ class mainController extends Controller
 			})
 			->when(strlen($data_sca)==10, function ($elenco) use($data_sca){			
 				return $elenco->where('data_scarico',$data_sca);
+			})
+			->when(strlen($filtro_note)!=0, function ($elenco) use($filtro_note){			
+				return $elenco->where('presenza_note',"=",$filtro_note)	;
 			})
 			->whereNotNull('id_import')
 			->get();
@@ -167,7 +172,7 @@ class mainController extends Controller
 		$solo_pref=1;
 	
 
-		return view('elenco',compact('token','dataass','elenco','isadmin','user','solo_pref','tipo_view','op_az','note','funzionari','elenco_assegnazioni','stat_azi','info_altrove'));
+		return view('elenco',compact('token','dataass','elenco','isadmin','user','solo_pref','tipo_view','op_az','note','funzionari','elenco_assegnazioni','stat_azi','info_altrove','filtro_note'));
 
    }	
 

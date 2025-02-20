@@ -123,7 +123,7 @@
                 <a href="https://wa.me/+14155238886?text=stop">
                   <button type="button" class="btn btn-warning btn-sm ml-2"><i class="fab fa-whatsapp"></i> Disabilita</button>
                 </a>
-                
+             
 
                 <hr>
                 <!-- handle from Vue !-->
@@ -132,12 +132,30 @@
                 </div>    
 
                 <form method='POST' action="{{ route('main', [$token,$dataass]) }}" id='frm_main' name='frm_main' autocomplete="off">
+               
+
+
                     <input type="hidden" value="{{url('/')}}" id="url" name="url">
                     <input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>	  
                     <input type='hidden' name='tipo_view' id='tipo_view' value='{{$tipo_view}}'>
                     <input type='hidden' name='op_az' id='op_az' value='{{$op_az}}'>
 
                     <div id="div_table">
+                        <div style='display:flex;flex-direction:column;width:200px;' class='mb-3'>
+                          <label for="filtro_note">Filtro note</label> 
+                          <select class="form-select" style='background-color:white;border:1px solid;padding:4px;border-radius:5px;border-color:gray' aria-label="Default select example" name="filtro_note" id="filtro_note" onchange="$('#frm_main').submit()">
+                            <option value=""
+                            @if ($filtro_note=='') selected @endif
+                            >Tutti</option>
+                            <option value="1"
+                            @if ($filtro_note=='1') selected @endif
+                            >Solo con note</option>
+                            <option value="0"
+                            @if ($filtro_note=='0') selected @endif
+                            >Senza note</option>
+                          </select>   
+                        </div>
+
                       <div style="text-align: right;display:none" id='btn_espandi'> 
                         <?php 
                           $out="";$txt="Espandi tutto";$value_e=1;
@@ -178,7 +196,6 @@
                               $azienda=$info->DENOM;
                               $azienda_clean=str_replace("'","",$azienda);
                               $azienda_clean=str_replace('"',"",$azienda_clean);                          
-                              
                             ?>
 
                               <tr id='tr{{$info->ID_anagr}}'>
@@ -188,7 +205,11 @@
                                       $nominativo=$nome_orig;
                                       if (strlen($nome_orig)>18) $nominativo=substr($nome_orig,0,18)."<br>".substr($nome_orig,19);
                                       if (isset($note[$info->posizione])) echo "<b>".$nominativo."</b>";
-                                      else echo "<span title='$nome_orig'>$nominativo</span>";
+                                      else  {
+                                        echo "<span title='$nome_orig'>";
+                                        
+                                        echo "$nominativo</span>";
+                                      }
                                       
                                     ?> 
                                   </td>
@@ -301,20 +322,33 @@
                                       }
                                     ?>
                                   </td>
+
+                                  <?php
+                                    $t1=$info->C1;
+                                    $t1=adegua_tel($t1);
+                                    $t2=$info->tel_ce;
+                                    $t2=adegua_tel($t2);
+                                    $t3=$info->tel_gps;
+                                    $t3=adegua_tel($t3);
+                                    $t4=$info->tel_sin;
+                                    $t4=adegua_tel($t4);
+                                    $t5=$info->tel_altro;
+                                    $t5=adegua_tel($t5);
+                                  ?>
                                   <td>
-                                    <a id="phone1" href="tel:{{$info->C1}}">{{$info->C1}}</a>
+                                    <a id="phone1" href="tel:{{$t1}}">{{$t1}}</a>
                                   </td>
                                   <td>
-                                    <a id="phone2" href="tel:{{$info->tel_ce}}">{{$info->tel_ce}}</a>
+                                    <a id="phone2" href="tel:{{$t2}}">{{$t2}}</a>
                                   </td>
                                   <td>
-                                    <a id="phone3" href="tel:{{$info->tel_gps}}">{{$info->tel_gps}}</a>
+                                    <a id="phone3" href="tel:{{$t3}}">{{$t3}}</a>
                                   </td>
                                   <td>
-                                    <a id="phone4" href="tel:{{$info->tel_sin}}">{{$info->tel_sin}}</a>
+                                    <a id="phone4" href="tel:{{$t4}}">{{$t4}}</a>
                                   </td>
                                   <td>
-                                    <a id="phone5" href="tel:{{$info->tel_altro}}">{{$info->tel_altro}}</a>
+                                    <a id="phone5" href="tel:{{$t5}}">{{$t5}}</a>
                                   </td>
                                   
                                   <td>FRT</td>
@@ -324,15 +358,23 @@
                                         $view='<table class="table">
                                           <thead>
                                             <tr>
+                                              <th scope="col"  style="width:30px"></th>
                                               <th scope="col">Utente</th>
-                                              <th scope="col">Data</th>
                                               <th scope="col">Nota</th>
-                                              <th scope="col">Stato</th>
+                                              <th scope="col">Data</th>
                                             </tr>
                                           </thead>
                                           <tbody>';
                                             for ($sca=0;$sca<count($note[$info->posizione]);$sca++) {
                                               $view.="<tr>";
+                                                  $view.="<td style='width:30px'>";
+                                                  if  ($note[$info->posizione][$sca]->stato_nota=="1")
+                                                  $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #ff0000;'></i>";
+                                                if  ($note[$info->posizione][$sca]->stato_nota=="2")
+                                                  $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #FFD43B;'></i>";
+                                                if  ($note[$info->posizione][$sca]->stato_nota=="3")
+                                                  $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #00ca00;'></i>";
+                                                $view.="</td>";                                              
                                                 $view.="<td>";
                                                   $id_funz=$note[$info->posizione][$sca]->id_user;
                                                   //$view.=$id_funz;
@@ -340,19 +382,11 @@
                                                     $view.=$funzionari[$id_funz];
                                                 $view.="</td>";
                                                 $view.="<td>";
-                                                  $view.=$note[$info->posizione][$sca]->created_at;
-                                                $view.="</td>";                                                
-                                                $view.="<td>";
                                                   $view.="<i>".$note[$info->posizione][$sca]->note."</i>";
                                                 $view.="</td>";
-                                                $view.="<td style='text-align:center'>";
-                                                  if  ($note[$info->posizione][$sca]->stato_nota=="1")
-                                                    $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #ff0000;'></i>";
-                                                  if  ($note[$info->posizione][$sca]->stato_nota=="2")
-                                                    $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #FFD43B;'></i>";
-                                                  if  ($note[$info->posizione][$sca]->stato_nota=="3")
-                                                    $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #00ca00;'></i>";
-                                                $view.="</td>";
+                                                $view.="<td>";
+                                                  $view.=$note[$info->posizione][$sca]->created_at;
+                                                $view.="</td>";                                                
 
                                               $view.="</tr>";  
                                             }
@@ -541,3 +575,15 @@
         
     </body>
 </html>
+
+<?php
+  function adegua_tel($t1) {
+    if (strlen($t1)==0) return $t1;
+    if (substr($t1,0,3)!="+39") {
+      if (substr($t1,0,2)!="39") $t1="+39$t1";
+      elseif (substr($t1,0,2)=="39" && strlen($t1)>10) $t1="+$t1";
+      elseif (substr($t1,0,2)=="39" && strlen($t1)<=10) $t1="+39$t1";
+    }
+    return $t1;
+  }
+?>

@@ -30,7 +30,13 @@ class AjaxController extends Controller
         $note->stato_nota=$stato_nota;
         $note->save();	
         $risp=array();
-        $risp['esito']="OK";
+
+        DB::table('anagrafe.t2_tosc_a')
+         ->where('posizione','=',$codlav)
+         ->update(['presenza_note' => 1]);
+        
+         $risp['esito']="OK";
+        
         return json_encode($risp);	
    }
 
