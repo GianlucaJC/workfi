@@ -167,7 +167,7 @@
                       </div>
 
                       @if ($op_az=='op')
-                      <table id='tbl_articoli' class="display">
+                      <table id='tbl_articoli' class="display nowrap">
                         <thead>
                           <tr>
                             <th>Nominativo</th>
