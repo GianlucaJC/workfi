@@ -33,6 +33,9 @@
             table-layout: fixed; // ***********add this
             word-wrap:break-word; // ***********and this
           }
+
+
+
         </style>
 
         <script>
@@ -94,6 +97,7 @@
           font-size:0.64rem;
         }
       }
+
     </style>
 
     <body class="font-sans antialiased">
@@ -358,7 +362,7 @@
                                         $view='<table class="table">
                                           <thead>
                                             <tr>
-                                              <th scope="col"  style="width:30px"></th>
+                                              <th scope="col" style="width:30px"></th>
                                               <th scope="col">Utente</th>
                                               <th scope="col">Nota</th>
                                               <th scope="col">Data</th>
@@ -381,7 +385,7 @@
                                                   if (array_key_exists($id_funz,$funzionari)) 
                                                     $view.=$funzionari[$id_funz];
                                                 $view.="</td>";
-                                                $view.="<td>";
+                                                $view.="<td style='white-space:wrap'>";
                                                   $view.="<i>".$note[$info->posizione][$sca]->note."</i>";
                                                 $view.="</td>";
                                                 $view.="<td>";

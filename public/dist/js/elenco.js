@@ -40,6 +40,7 @@ function set_table(tipo,id_tb) {
         columnDefs: [
 
             { "width": w, "targets": [0] },
+
            // { "width": "1rem", "targets": [1] }
         ],          
         buttons: [
