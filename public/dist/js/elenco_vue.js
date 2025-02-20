@@ -32,14 +32,15 @@ var app = Vue.component('App',{
                     <i class="fas fa-spinner fa-spin"></i>
                 </p>
                 <button type="button" v-if="isnew==false" class="btn btn-success" @click="save_nota()">Salva</button>
-				<button type="button" v-if="flagsave==1" class="ml-2 btn btn-outline-primary" @click="refr()">Refresh tabella (se vuoi vedere subito la nota)</button>
-
+				
+				
                 <button type="button" class="ml-2 btn btn-secondary" @click='close_edit()'>Torna all'elenco</button>
             </div>
  		</div>
         </form>	
-			
-	`,
+	`
+		//<button type="button" v-if="flagsave==1" class="ml-2 btn btn-outline-primary" @click="refr()">Refresh tabella (se vuoi vedere subito la nota)</button>
+	,
 	data() {
         let codlav=0;
 		let user="";
