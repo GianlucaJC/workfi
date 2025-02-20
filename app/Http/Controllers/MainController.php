@@ -22,7 +22,8 @@ class mainController extends Controller
 			ed appenderlo alla url di workfi es:
 			in locale: http://localhost:8012/workfi/public/main/81de27c50e806b9477edb63f45124108
 		*/
-		$this->redirect="https://www.filleaoffice.it/homeFO/enter/index.php?workfi=1";
+		//?workfi=1 //per farlo rientrare direttamente in workfi...eliminato perchè da luogo a bug
+		$this->redirect="https://www.filleaoffice.it/homeFO/enter/index.php";
 	}	
 
 
@@ -31,10 +32,8 @@ class mainController extends Controller
 	  	//$token = bin2hex(random_bytes(16)); 
 	  	//echo $token;
 
-
-		/*
 		if (strlen($token)==0) {
-			if ($request->session()->has('token')) $token=$request->session()->get('token');
+			if ($request->session()->has('token')) return $this->redirect_url();
 		} else {
 			//in caso di token inviato e diverso dalla sessione in corso ->redirect!
 			if ($request->session()->has('token')) {
@@ -44,8 +43,7 @@ class mainController extends Controller
 				}
 			}
 		}
-		*/
-
+		
 		
 		if (strlen($token)==0) return $this->redirect_url();
 		
