@@ -92,6 +92,27 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <style>
+      .filtraggio{
+        display: flex;
+        justify-content: start;
+        flex-direction: row;
+        margin-bottom: 10px;
+      }
+
+      .filtri{
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        flex-direction: column;
+        margin-right: 15px;
+
+        div{
+          display: flex;
+          flex-direction: row;
+          gap: 5px;
+        }
+      }
+
       @media all and (max-width:768px){
         body {
           font-size:0.64rem;
@@ -143,9 +164,11 @@
                     <input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>	  
                     <input type='hidden' name='tipo_view' id='tipo_view' value='{{$tipo_view}}'>
                     <input type='hidden' name='op_az' id='op_az' value='{{$op_az}}'>
+                    <input type='hidden' name='filtro_colore' id='filtro_colore' value='{{$filtro_colore}}'>
 
                     <div id="div_table">
-                        <div style='display:flex;flex-direction:column;width:200px;' class='mb-3'>
+                      <div class="filtraggio">
+                        <div class="filtri" class='mb-3'>
                           <label for="filtro_note">Filtro note</label> 
                           <select class="form-select" style='background-color:white;border:1px solid;padding:4px;border-radius:5px;border-color:gray' aria-label="Default select example" name="filtro_note" id="filtro_note" onchange="$('#frm_main').submit()">
                             <option value=""
@@ -157,9 +180,36 @@
                             <option value="0"
                             @if ($filtro_note=='0') selected @endif
                             >Senza note</option>
-                          </select>   
+                          </select>
                         </div>
+                          <div class='filtri'>
+                          <?php
+                            $cl1="far";$cl2="far";$cl3="far";
+                            if ($filtro_colore=="1") $cl1="fas";
+                            if ($filtro_colore=="2") $cl2="fas";
+                            if ($filtro_colore=="3") $cl3="fas";
+                          ?>  
 
+                            <div>
+                            <a href='javascript:void(0)' onclick='set_filtro_stato(1)'>
+                            <i class="{{$cl1}} fa-circle fa-lg mt-3 semaforo" style="color: #ff0000;" id="sem1"></i>
+                            </a>
+                            <a href='javascript:void(0)' onclick='set_filtro_stato(2)'>
+                            <i class="{{$cl2}} fa-circle fa-lg mt-3 semaforo" style="color: #FFD43B;" id="sem2"></i>
+                            </a>
+                            <a href='javascript:void(0)' onclick='set_filtro_stato(3)'>
+                            <i class="{{$cl3}} fa-circle fa-lg mt-3 semaforo" style="color: #00ca00;" id="sem3"></i>
+                            </a>
+                            @if (strlen($filtro_colore)!=0) 
+                            <a href='javascript:void(0)' onclick='set_filtro_stato()'>
+                            <i class="ml-2 fa-solid fa-xmark fa-lg mt-3" style="color: #ff0000;"></i>
+                            </a>
+                            @endif
+
+                          </div>
+                          </div>                          
+                        </div>
+                      </div>
                       <div style="text-align: right;display:none" id='btn_espandi'> 
                         <?php 
                           $out="";$txt="Espandi tutto";$value_e=1;

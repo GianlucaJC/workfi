@@ -110,6 +110,9 @@ class mainController extends Controller
 		if (strlen($dataass)==8) 
 			$data_sca=substr($dataass,0,4)."-".substr($dataass,4,2)."-".substr($dataass,6,2);
 
+		
+		$filtro_colore=$request->input('filtro_colore');
+
 		if ($op_az=='az')  {
 			$elenco=DB::table('anagrafe.t2_tosc_a')
 			->select("*")
@@ -124,18 +127,24 @@ class mainController extends Controller
 			->get();			
 		}
 		else {
-			$elenco=DB::table('anagrafe.t2_tosc_a')
+			$elenco=DB::table('anagrafe.t2_tosc_a as t')
 			->select("*")
+			->when(strlen($filtro_colore)!=0, function($elenco) use ($filtro_colore) {
+					$elenco->join('bsfi.note as n','t.posizione','n.codlav')
+					->where('n.stato_nota','=',$filtro_colore);
+					return $elenco;
+			})			
 			->when($isadmin!=1, function ($elenco) use($arr_user){			
-				return $elenco->whereIn('denom',$arr_user);
+				return $elenco->whereIn('t.denom',$arr_user);
 			})
 			->when(strlen($data_sca)==10, function ($elenco) use($data_sca){			
-				return $elenco->where('data_scarico',$data_sca);
+				return $elenco->where('t.data_scarico',$data_sca);
 			})
 			->when(strlen($filtro_note)!=0, function ($elenco) use($filtro_note){			
-				return $elenco->where('presenza_note',"=",$filtro_note)	;
+				return $elenco->where('t.presenza_note',"=",$filtro_note)	;
 			})
-			->whereNotNull('id_import')
+			->whereNotNull('t.id_import')
+			->groupBy('t.posizione')
 			->get();
 		}
 		
@@ -172,7 +181,7 @@ class mainController extends Controller
 		$solo_pref=1;
 	
 
-		return view('elenco',compact('token','dataass','elenco','isadmin','user','solo_pref','tipo_view','op_az','note','funzionari','elenco_assegnazioni','stat_azi','info_altrove','filtro_note'));
+		return view('elenco',compact('token','dataass','elenco','isadmin','user','solo_pref','tipo_view','op_az','note','funzionari','elenco_assegnazioni','stat_azi','info_altrove','filtro_note','filtro_colore'));
 
    }	
 

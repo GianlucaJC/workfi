@@ -219,3 +219,9 @@ function view_lav(azienda) {
         return console.log(status, err);
     })     
 }
+
+
+function set_filtro_stato(value) {
+    $("#filtro_colore").val(value)
+    $("#frm_main").submit()
+}
