@@ -27,7 +27,7 @@ class mainController extends Controller
 	}	
 
 
-    public function main($token="",$dataass=""){
+    public function main($token="",$dataass=""){		
 		$request=Request();
 	  	//$token = bin2hex(random_bytes(16)); 
 	  	//echo $token;
@@ -35,11 +35,14 @@ class mainController extends Controller
 		if (strlen($token)==0) {
 			if ($request->session()->has('token')) return $this->redirect_url();
 		} else {
-			//in caso di token inviato e diverso dalla sessione in corso ->redirect!
-			if ($request->session()->has('token')) {
-				$token_s=$request->session()->get('token');
-				if ($token_s!=$token) {
-					return $this->redirect_url();
+			$from_fo=explode("|",$token);
+			if (isset($from_fo[1])) {
+				//in caso di token inviato e diverso dalla sessione in corso ->redirect!
+				if ($request->session()->has('token')) {
+					$token_s=$request->session()->get('token');
+					if ($token_s!=$token) {
+						return $this->redirect_url();
+					}
 				}
 			}
 		}
