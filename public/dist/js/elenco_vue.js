@@ -118,7 +118,45 @@ var app = Vue.component('App',{
             if (testo_nota.length==0) return false
 		},  
 
-          
+		save_stato() {
+            base_path = $("#url").val();
+			var self = this;
+            this.savewait=true    
+
+			setTimeout(function() {
+				//<meta name="csrf-token" content="{{{ csrf_token() }}}"> //da inserire in html
+				const metaElements = document.querySelectorAll('meta[name="csrf-token"]');
+				const csrf = metaElements.length > 0 ? metaElements[0].content : "";			
+				fetch(base_path+"/save_stato", {
+					method: 'post',
+					headers: {
+						"Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+						"X-CSRF-Token": csrf
+					},
+					body: "codlav="+self.codlav+"&stato_nota="+self.stato_nota
+				})
+				.then(response => {
+					if (response.ok) {
+						return response.json();
+					}
+				})
+				.then(response=>{
+                    self.savewait=false
+					esito=response.esito
+                    if (esito=="OK") {
+                        self.flagsave=1
+                        alert("Dati salvati con successo!")
+
+                    } 
+                    else alert("Attenzione! Problema occorso durante il salvataggio");
+				})
+				.catch(status, err => {
+					return console.log(status, err);
+				})		
+			}, 600);					
+
+		},
+		
 		save_nota() {
             base_path = $("#url").val();
             check=this.check_ins()

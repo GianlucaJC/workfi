@@ -14,6 +14,64 @@ $(document).ready( function () {
     set_table(tipo_view,'tbl_articoli')
 } );
 
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+    'use strict'
+  
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+  
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          } else {
+              var cf=$("#codfisc_frt").val()
+              var valida=validaCodiceFiscale(cf);
+              if (valida==false) {
+                $("#codfisc_frt").removeClass('is-valid').addClass('is-invalid');
+                event.preventDefault()
+                event.stopPropagation()
+                alert("Codice fiscale non valido!")
+              } else {
+                  $("#codfisc").removeClass('is-invalid').addClass('is-valid');			
+                  save_frt()
+              }
+              
+          }	
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })()
+
+
+function validaCodiceFiscale(cf){
+    var validi, i, s, set1, set2, setpari, setdisp;
+    if( cf == '' )  return '';
+    cf = cf.toUpperCase();
+    if( cf.length != 16 )
+        return false;
+    validi = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for( i = 0; i < 16; i++ ){
+        if( validi.indexOf( cf.charAt(i) ) == -1 )
+            return false;
+    }
+    set1 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    set2 = "ABCDEFGHIJABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    setpari = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    setdisp = "BAKPLCQDREVOSFTGUHMINJWZYX";
+    s = 0;
+    for( i = 1; i <= 13; i += 2 )
+        s += setpari.indexOf( set2.charAt( set1.indexOf( cf.charAt(i) )));
+    for( i = 0; i <= 14; i += 2 )
+        s += setdisp.indexOf( set2.charAt( set1.indexOf( cf.charAt(i) )));
+    if( s%26 != cf.charCodeAt(15)-'A'.charCodeAt(0) )
+        return false;
+    return true;
+}
 function set_table(tipo,id_tb) {
     responsive=true
     if (tipo==1) {
@@ -115,6 +173,74 @@ function set_opaz() {
     $('#frm_main').submit();
 }
 
+
+function insert_frt(id_anagr) {
+	$("#confirm_frt").prop('checked', false)
+	$("#btn_save_frt").html('Inserisci in FRT'); 
+	$("#btn_save_frt").prop('disabled', false);
+	
+	ref=$("#id_ref"+id_anagr)
+	$("#ref_edit_frt").val(id_anagr)
+	nome=ref.data('nome')
+	datanasc=ref.data('datanasc').substr(0,10)
+	telefoni=ref.data('telefoni')
+	
+	//precompilazione delega in funzione della scelta
+	$("#nome_frt").val(nome)
+	$("#natoil_frt").val(datanasc)
+
+	$("#tel_frt").val(telefoni)
+	
+	$('#modal_frt').modal('toggle')
+	$("#title_modal_frt").html("Inserisci <b>"+nome+"</b> in FilleaRealTime<b>")
+}	
+
+function save_frt() {
+	event.preventDefault()
+	if (!($('#confirm_frt').is(':checked'))) {
+		alert("Confermare la richiesta di iscrizione in FRT")
+		return false;
+	}
+		
+	ref_edit_frt=$("#ref_edit_frt").val()
+	nome_frt=$("#nome_frt").val()
+	natoil_frt=$("#natoil_frt").val()
+	codfisc_frt=$("#codfisc_frt").val()
+	sesso_frt=$("#sesso_frt").val()
+	sind_frt=$("#sind_frt").val()
+	ente_frt=$("#ente_frt").val()
+	tel_frt=$("#tel_frt").val()
+	id_azienda=$("#id_azienda").val()
+
+	$("#btn_save_frt").html('Attendere...'); 
+	$("#btn_save_frt").prop('disabled', true);
+	
+	var timer,delay = 800;	
+
+	clearTimeout(timer);
+	timer = setTimeout(function() {	
+		base_path = $("#url").val();
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+		});
+		let CSRF_TOKEN = $("#token_csrf").val();
+		$.ajax({
+			type: 'POST',
+			url: base_path+"/ins_frt",
+			data: {_token: CSRF_TOKEN,nome_frt:nome_frt,natoil_frt:natoil_frt,codfisc_frt:codfisc_frt,sesso_frt:sesso_frt,sind_frt:sind_frt,ente_frt:ente_frt,tel_frt:tel_frt},
+			success: function (data) {
+				html="";
+				html+=`<a href='#' onclick="$('#frm_main').submit()">
+						Refresh pagina dopo inserimento FRT
+					</a>`	
+				$("#frt_"+ref_edit_frt).html(html)
+				$('#modal_frt').modal('toggle')			
+			}
+		})	
+	}, delay)	
+}
 //function disabilitata a favore della nuova consultazione anagrafe (passo i parametri in $_get...valutare $_post per problemi escape)
 function view_lav(azienda) {
     $("#div_lav").empty();

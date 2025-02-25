@@ -22,6 +22,8 @@ Route::post('/main/{token?}/{dataass?}', [ 'as' => 'main', 'uses' => 'App\Http\C
 
 
 Route::post('save_nota', 'App\Http\Controllers\AjaxController@save_nota');
+Route::post('save_stato', 'App\Http\Controllers\AjaxController@save_stato');
+Route::post('ins_frt', 'App\Http\Controllers\AjaxController@ins_frt');
 Route::post('/elenco}', [ 'as' => 'elenco', 'uses' => 'App\Http\Controllers\MainController@elenco']);
 
 Route::post('register_push', [ 'as' => 'register_push', 'uses' => 'App\Http\Controllers\ApiController@register_push']);

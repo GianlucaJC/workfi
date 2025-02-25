@@ -178,27 +178,35 @@ class mainController extends Controller
 		$note=$this->note();
 		$funzionari=$this->funzionari();
 		$elenco_assegnazioni=$this->elenco_assegnazioni('all');
+		$elenco_frt=$this->elenco_frt();
+		
 		$stat_azi=$this->stat_azi();
 
 		
 		$solo_pref=1;
 	
 
-		return view('elenco',compact('token','dataass','elenco','isadmin','user','solo_pref','tipo_view','op_az','note','funzionari','elenco_assegnazioni','stat_azi','info_altrove','filtro_note','filtro_colore'));
+		return view('elenco',compact('token','dataass','elenco','isadmin','user','solo_pref','tipo_view','op_az','note','funzionari','elenco_assegnazioni','elenco_frt','stat_azi','info_altrove','filtro_note','filtro_colore'));
 
    }	
 
 
    public function funzionari() {
-		$elenco=DB::table('online.db')
-		->select("N_TESSERA","UTENTEFILLEA")
-		->get();
-		$res=array();
-		foreach($elenco as $row) {
-			$res[$row->N_TESSERA]=$row->UTENTEFILLEA;
+		$info = DB::table('online.db')
+			->select('db.n_tessera','db.id_prov_associate','db.utentefillea','p.provincia','p.sigla_pr')
+			->join('bdf.province as p','db.id_prov_associate','p.id')
+			->get();
+		$user=array();
+		foreach($info as $utente) {
+			$user[$utente->n_tessera]['utentefillea']=$utente->utentefillea;
+			$user[$utente->n_tessera]['id_prov_associate']=$utente->id_prov_associate;
+			$user[$utente->n_tessera]['provincia']=$utente->provincia;
+			$user[$utente->n_tessera]['sigla_pr']=$utente->sigla_pr;
 		}
-		return $res;	
-   }
+		return $user;
+	}   
+
+
 
    public function elenco_assegnazioni($from) {
 		$res=array();$sca=0;$old="?";
@@ -235,6 +243,29 @@ class mainController extends Controller
 
 		return $res;	
 	
+	}
+
+	function elenco_frt() {
+		$elenco=DB::table('anagrafe.t2_tosc_a as t')
+		->join('frt.generale as frt', function($join) {
+			$join->on('frt.nome','=','t.nome');
+			$join->on('frt.natoil','=','t.datanasc');
+		})		
+		->select("t.posizione","frt.utente","data_update")
+		->orderby('data_update','desc')
+		->get();
+		$resp=array();
+		$indice=0;
+		foreach($elenco as $frt) {
+			$posizione=$frt->posizione;
+			$utente=$frt->utente;
+			$data_update=$frt->data_update;
+			if (array_key_exists($posizione,$resp)) $indice++;
+			else $indice=0;
+			$resp[$posizione][$indice]['utente']=$utente;
+			$resp[$posizione][$indice]['data_update']=$data_update;
+		}
+		return $resp;
 	}
 
 	function stat_azi() {

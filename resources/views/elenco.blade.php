@@ -6,7 +6,11 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -21,6 +25,7 @@
 
         <!-- Font Awesome Icons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
         <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
@@ -111,6 +116,9 @@
           flex-direction: row;
           gap: 5px;
         }
+      }
+      .dt-search {
+        margin-top:7px;
       }
 
       @media all and (max-width:768px){
@@ -209,7 +217,7 @@
                           </div>
                           </div>                          
                         </div>
-                      </div>
+                      
                       <div style="text-align: right;display:none" id='btn_espandi'> 
                         <?php 
                           $out="";$txt="Espandi tutto";$value_e=1;
@@ -270,9 +278,6 @@
 
                                   <td>
                                     {{$info->data_scarico}}
-                                    <span id='id_ref{{$info->ID_anagr}}' 
-                                        data-nominativo='{{$info->NOME}}'
-                                    >
                                   </td>                                  
 
                                   <td>
@@ -318,12 +323,15 @@
                                     ?> 
                                   </td>
 
-                                  <td>
+                                  <td id='frt_{{$info->ID_anagr}}'>
                                     <?php
                                       if (isset($info->posizione) && strlen($info->posizione)>0) {?>
                                         <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-primary btn-sm">Note</button>
                                     <?php } ?>    
-                                      <button type="button" class="btn btn-secondary btn-sm">FRT</button>
+                                      <button type="button" class="btn btn-secondary btn-sm"  onclick="insert_frt({{$info->ID_anagr}})">
+                                        
+                                        FRT
+                                      </button>
 
                                   </td> 
 
@@ -341,10 +349,9 @@
                                           $id_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['id_assegnazione'];
                                           $id_funz=$elenco_assegnazioni[$azienda_clean][$i]['id_funzionario'];
                                           $data_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['data_assegnazione'];
-                              
                                           if (array_key_exists($id_funz,$funzionari)) {
                                             echo "<b>$id_funz</b>: ";
-                                            echo $funzionari[$id_funz];
+                                            echo $funzionari[$id_funz]['utentefillea'];
                                           }
                                         }
                                       }                                     
@@ -388,6 +395,7 @@
                                     $t4=adegua_tel($t4);
                                     $t5=$info->tel_altro;
                                     $t5=adegua_tel($t5);
+                                    $tel_all="$t1 $t2 $t3 $t4 $t5";
                                   ?>
                                   <td>
                                     <a id="phone1" href="tel:{{$t1}}">{{$t1}}</a>
@@ -405,7 +413,23 @@
                                     <a id="phone5" href="tel:{{$t5}}">{{$t5}}</a>
                                   </td>
                                   
-                                  <td>FRT</td>
+                                  <td>
+                                    <?php
+                                        $render_frt=render_frt($elenco_frt,$info->posizione,$funzionari);
+                                        echo $render_frt;
+                                        $view="";
+                                        $view.="
+                                         <span id='id_ref".$info->ID_anagr."'
+                                            data-nominativo='".$info->NOME."'
+                                            data-nome='".$info->NOME."'
+                                            data-datanasc='".$info->DATANASC."'
+                                            data-telefoni='".$tel_all."'>
+                                        </span>";                                       
+                                        echo $view;                                          
+                                      ?>  
+
+                                    
+                                  </td>
                                   <td>
                                     <?php
                                       if (isset($note[$info->posizione])) {
@@ -432,8 +456,12 @@
                                                 $view.="<td>";
                                                   $id_funz=$note[$info->posizione][$sca]->id_user;
                                                   //$view.=$id_funz;
-                                                  if (array_key_exists($id_funz,$funzionari)) 
-                                                    $view.=$funzionari[$id_funz];
+
+                                                    if (array_key_exists($id_funz,$funzionari)) {
+                                                      $view.="<b>$id_funz</b>: ";
+                                                      $view.=$funzionari[$id_funz]['utentefillea'];
+                                                    }                                                     
+                                                                   
                                                 $view.="</td>";
                                                 $view.="<td style='white-space:wrap'>";
                                                   $view.="<i>".$note[$info->posizione][$sca]->note."</i>";
@@ -447,8 +475,6 @@
                                           $view.='
                                           </tbody>  
                                         </table>';
-                                        echo $view;
-                                        
 
                                       }
                                     ?>
@@ -574,32 +600,160 @@
 
           </div>
        
-
-        <!-- Modal for libri preferiti-->
-         
-        <div class="modal fade" id="modal_prefer" tabindex="-1" role="dialog" aria-labelledby="Libri preferiti" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Libri preferiti dall'utente</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <!--MODAL FRT !-->
+          <form method='post' action="" id='frm_tab2' name='frm_tab2' autocomplete="off"  class="needs-validation form-floating" novalidate>
+            <input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>
+            <!-- Modal for edit note/contatti -->
+            <div class="modal fade bd-example-modal-lg" id="modal_frt" tabindex="-1" role="dialog" aria-labelledby="info" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <input type='hidden' name='ref_edit_frt' id='ref_edit_frt'>
+              <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="title_modal_frt">Inserisci nominativo in FilleaRealTime</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-              </div>
-              <div class="modal-body" id="cont_prefer">
+                </div>
+        
+              <div class="modal-body" id='body_modal_edit_frt'>
+                <div class='row g-2 mb-2'>
+                  
+                  <div class="col-sm-12 col-md-8">
+                    <div class="form-floating">
+                      <input class="form-control" id="nome_frt" name='nome_frt' type="text" placeholder="Nominativo" maxlength=100 required />
+                      <label for="nome_frt">Nominativo*</label>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12 col-md-4">
+                    <div class="form-floating">
+                      <input class="form-control" id="natoil_frt" name='natoil_frt' type="date" required />
+                      <label for="natoil_frt">Nato il*</label>
+                    </div>
+                  </div>
+                  
+                </div>	
                 
+                <div class='row g-2 mb-2'>
+                  <div class="col-md-4">
+                    <div class="form-floating">
+                      <input class="form-control" id="codfisc_frt" name='codfisc_frt' type="text" placeholder="CF" maxlength=16 required />
+                      <label for="codfisc_frt">Codice Fiscale*</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-floating">
+                      <input class="form-control" id="tel_frt" name='tel_frt' type="text" placeholder="Telefono" maxlength=50 required />
+                      <label for="tel_frt">Telefono*</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-floating mb-3 mb-md-0">
+                    <select class="form-select" id="sesso_frt" aria-label="Sesso" name='sesso_frt' required>
+                      <option value=''>Select...</option>
+                      <option value='M'
+                      >Maschile</option>
+                      <option value='F' 
+                      >Femminile</option>
+                    </select>
+                    <label for="sesso_frt">Sesso*</label>
+                    </div>
+                  </div>
+                  <input type='hidden' name='sind_frt' id='sind_frt' value='0'>
+                  <input type='hidden' name='ente_frt' id='ente_frt' value='C'>
+
+                </div>
+                <div class='row g-2 mb-2 ml-3'>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="confirm_frt" required>
+                    <label class="form-check-label for="confirm_frt">Conferma operazione di iscrizione</label>
+                  </div>						
+                </div>
+              
+                
+                </div>
+                
+                <div class="modal-footer">
+                
+                <button type="submit" class="btn btn-primary" id='btn_save_frt'>Inserisci in FRT</button>
+                
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                
+                </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
               </div>
             </div>
-          </div>
-        </div>          
+          </form>    
+        
+        
         </main> 
 
 
 
        </div>
+
+
+       <?php
+        function render_frt($info_frt,$posizione,$user_frt) {
+          $view=null;
+          if (!isset($info_frt[$posizione])) return false;
+          $view.="<div style='display: flex;justify-content: left;width:60%'>";
+            $view.="<table class='table table-bordered mt-2'>";
+              $view.="<thead>";
+                $view.="<tr>";
+                  $view.="<th>Utente</th>";
+                  $view.="<th>Data</th>";
+                $view.="</tr>";
+              $view.="</thead>";
+              
+
+
+              foreach($info_frt[$posizione] as $frt_dati) {
+                $view.="<tr>";
+                  $view.="<td>";
+                    $view.=$frt_dati['utente'];
+                    if (isset($user_frt[$frt_dati['utente']])) {
+                      $view.="<br><small><i>".$user_frt[$frt_dati['utente']]['utentefillea']."</i></small>";
+                      
+                      $view.="(".$user_frt[$frt_dati['utente']]['sigla_pr'];
+                      /*
+                      $view.="<a href='javascript:void(0)' onclick=\"info_stru(".$user_frt[$frt_dati['utente']]['id_prov_associate'].")\">";
+                        $view.= "<i class='fas fa-sign-in-alt fa-xs ml-2'></i>";
+                      $view.= "</a>";	
+                      */
+
+                      $view.=")";							
+                      
+              
+                    }
+                  $view.="</td>";
+                  
+                  
+                  $view.="<td>";
+                    $view.=$frt_dati['data_update'];
+                  $view.="</td>";	
+                              
+                $view.="</tr>";
+              }
+            $view.="</table>";
+          $view.="</div>";
+          
+
+          
+          return $view;
+        }
+        function adegua_tel($t1) {
+          if (strlen($t1)==0) return $t1;
+          if (substr($t1,0,3)!="+39") {
+            if (substr($t1,0,2)!="39") $t1="+39$t1";
+            elseif (substr($t1,0,2)=="39" && strlen($t1)>10) $t1="+$t1";
+            elseif (substr($t1,0,2)=="39" && strlen($t1)<=10) $t1="+39$t1";
+          }
+          return $t1;
+        }
+      ?>       
   
       <!-- dipendenze DataTables !-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css"/>
@@ -630,14 +784,4 @@
     </body>
 </html>
 
-<?php
-  function adegua_tel($t1) {
-    if (strlen($t1)==0) return $t1;
-    if (substr($t1,0,3)!="+39") {
-      if (substr($t1,0,2)!="39") $t1="+39$t1";
-      elseif (substr($t1,0,2)=="39" && strlen($t1)>10) $t1="+$t1";
-      elseif (substr($t1,0,2)=="39" && strlen($t1)<=10) $t1="+39$t1";
-    }
-    return $t1;
-  }
-?>
+
