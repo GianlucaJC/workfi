@@ -9,11 +9,9 @@ var app = Vue.component('App',{
                 Caricamento dati in corso <i class="fas fa-spinner fa-spin"></i>
             </p>
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Testo libero*</span>
-                </div>
-                <textarea required placeholder='Descrizione' class="form-control" aria-label="Testo libero" v-model='testo_nota' aria-describedby="Descrizione della nota" rows="5"></textarea>
+            <div class="input-group mb-3 mt-2">
+				<textarea required placeholder='Descrizione' class="form-control" aria-label="Testo libero" v-model='testo_nota' aria-describedby="Descrizione della nota" rows="5">
+				</textarea>
             </div>
 
 			<div class='mt-2'>
