@@ -133,9 +133,7 @@ class mainController extends Controller
 			$elenco=DB::table('anagrafe.t2_tosc_a as t')
 			->select("*")
 			->when(strlen($filtro_colore)!=0, function($elenco) use ($filtro_colore) {
-					$elenco->join('bsfi.note as n','t.posizione','n.codlav')
-					->where('n.stato_nota','=',$filtro_colore);
-					return $elenco;
+				return $elenco->where('t.stato_lav',"=",$filtro_colore);
 			})			
 			->when($isadmin!=1, function ($elenco) use($arr_user){			
 				return $elenco->whereIn('t.denom',$arr_user);
@@ -144,13 +142,13 @@ class mainController extends Controller
 				return $elenco->where('t.data_scarico',$data_sca);
 			})
 			->when(strlen($filtro_note)!=0, function ($elenco) use($filtro_note){			
-				return $elenco->where('t.presenza_note',"=",$filtro_note)	;
+				return $elenco->where('t.presenza_note',"=",$filtro_note);
 			})
 			->whereNotNull('t.id_import')
 			->groupBy('t.posizione')
 			->get();
 		}
-		
+	
 
 		$info_altrove=array();
 		/*

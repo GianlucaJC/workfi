@@ -88,7 +88,7 @@ class AjaxController extends Controller
      }
 
    public function save_stato(Request $request) {
-      /*
+      
       $codlav=$request->input('codlav');
       $stato_nota=$request->input('stato_nota');
 	
@@ -96,12 +96,12 @@ class AjaxController extends Controller
 
       DB::table('anagrafe.t2_tosc_a')
        ->where('posizione','=',$codlav)
-       ->update(['presenza_note' => 1]);
+       ->update(['stato_lav' => $stato_nota]);
       
        $risp['esito']="OK";
       
       return json_encode($risp);	
-      */
+      
  }   
 
 }

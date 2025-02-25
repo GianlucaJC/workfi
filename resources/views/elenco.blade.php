@@ -273,7 +273,20 @@
                                         echo "$nominativo</span>";
                                       }
                                       
-                                    ?> 
+                                    ?>
+
+                                    <span class='ml-2' id='status_lav{{$info->posizione}}' style="float: right">
+                                        @if ($info->stato_lav=="1")
+                                          <i class="fas fa-circle fa-lg mt-3" style="color: #ff0000;" id="sem1" @click='set_stato(1)'></i>
+                                        @endif
+                                        @if ($info->stato_lav=="2")
+                                        <i class="fas fa-circle fa-lg mt-3" style="color: #FFD43B;" id="sem2" @click='set_stato(2)'></i>
+                                        @endif
+                                        @if ($info->stato_lav=="3")
+                                        <i class="fas fa-circle fa-lg mt-3" style="color: #00ca00;" id="sem3" @click='set_stato(3)'></i>
+                                        @endif
+                                    </span>    
+
                                   </td>
 
                                   <td>

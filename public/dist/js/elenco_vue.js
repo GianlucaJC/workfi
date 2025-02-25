@@ -22,6 +22,8 @@ var app = Vue.component('App',{
 				<i class="far fa-circle fa-lg mt-3 semaforo" style="color: #FFD43B;" id="sem2" @click='set_stato(2)'></i></a>
 				<a href='javascript:void(0)'>
 				<i class="far fa-circle fa-lg mt-3 semaforo" style="color: #00ca00;" id="sem3" @click='set_stato(3)'></i></a>
+				<a href='javascript:void(0)'>
+				<i class="fas fa-ban fa-lg mt-3" style="color:rgba(0, 0, 0, 0.94);" id="sem4" @click='set_stato(0)'></i></a>				
 			</div>
 
 
@@ -85,12 +87,13 @@ var app = Vue.component('App',{
 		//this.events(this.periodo_ref)
     },	
 	methods: {
-		set_stato(from) {
+		set_stato(from) {			
 			$(".semaforo").removeClass("fas fa-circle")
 			$(".semaforo").removeClass("far fa-circle")
 			$(".semaforo").addClass("far fa-circle")
 			$("#sem"+from).addClass("fas fa-circle")
 			work.stato_nota=from
+			this.save_stato();
 		},
         reset_form() {
             this.testo_nota="";
@@ -144,6 +147,16 @@ var app = Vue.component('App',{
                     if (esito=="OK") {
                         self.flagsave=1
                         alert("Dati salvati con successo!")
+						self.close_edit()
+						html=""
+						if (self.stato_nota=="1")
+							html='<i class="fas fa-circle fa-lg mt-3" style="color: #ff0000;"></i>'
+						if (self.stato_nota=="2")
+						  	html='<i class="fas fa-circle fa-lg mt-3" style="color: #FFD43B;"></i>'
+						if (self.stato_nota=="3")
+						  	html='<i class="fas fa-circle fa-lg mt-3" style="color: #00ca00;"></i>'
+						
+						$("#status_lav"+self.codlav).html(html)
 
                     } 
                     else alert("Attenzione! Problema occorso durante il salvataggio");
@@ -176,7 +189,7 @@ var app = Vue.component('App',{
 						"Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
 						"X-CSRF-Token": csrf
 					},
-					body: "user="+self.user+"&codlav="+self.codlav+"&testo_nota="+self.testo_nota+"&stato_nota="+self.stato_nota
+					body: "user="+self.user+"&codlav="+self.codlav+"&testo_nota="+self.testo_nota
 				})
 				.then(response => {
 					if (response.ok) {
