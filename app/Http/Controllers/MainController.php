@@ -258,7 +258,7 @@ class mainController extends Controller
 		$indice=0;
 		foreach($elenco as $frt) {
 			$posizione=$frt->posizione;
-			$utente=$frt->utente;
+			$utente=strtoupper($frt->utente);
 			$data_update=$frt->data_update;
 			if (array_key_exists($posizione,$resp)) $indice++;
 			else $indice=0;
