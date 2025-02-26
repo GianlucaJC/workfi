@@ -195,11 +195,13 @@ class mainController extends Controller
 			->join('bdf.province as p','db.id_prov_associate','p.id')
 			->get();
 		$user=array();
+
 		foreach($info as $utente) {
-			$user[$utente->n_tessera]['utentefillea']=$utente->utentefillea;
-			$user[$utente->n_tessera]['id_prov_associate']=$utente->id_prov_associate;
-			$user[$utente->n_tessera]['provincia']=$utente->provincia;
-			$user[$utente->n_tessera]['sigla_pr']=$utente->sigla_pr;
+			$tess=strtoupper($utente->n_tessera);
+			$user[$tess]['utentefillea']=$utente->utentefillea;
+			$user[$tess]['id_prov_associate']=$utente->id_prov_associate;
+			$user[$tess]['provincia']=$utente->provincia;
+			$user[$tess]['sigla_pr']=$utente->sigla_pr;
 		}
 		return $user;
 	}   
@@ -222,7 +224,7 @@ class mainController extends Controller
 				$sca=0;$old=$azienda;
 			}
 			$id_assegnazione=$risposta->id;
-			$id_funzionario=$risposta->id_funzionario;
+			$id_funzionario=strtoupper($risposta->id_funzionario);
 			$data_assegnazione=$risposta->data_assegnazione;
 			$stat_azi_before=$risposta->stat_azi_before;
 			$res2[]=$azienda;

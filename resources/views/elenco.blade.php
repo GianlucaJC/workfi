@@ -338,8 +338,10 @@
 
                                   <td id='frt_{{$info->ID_anagr}}'>
                                     <?php
+                                      $btn_col="secondary";
+                                      if (isset($note[$info->posizione])) $btn_col="primary";
                                       if (isset($info->posizione) && strlen($info->posizione)>0) {?>
-                                        <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-primary btn-sm">Note</button>
+                                        <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-{{$btn_col}} btn-sm">Note</button>
                                     <?php } 
                                     
                                     $btn_col="secondary";
@@ -366,7 +368,7 @@
                                         for ($i=0;$i<count($elenco_assegnazioni[$azienda_clean]);$i++) {
                                           if ($i>0) echo "<hr>";
                                           $id_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['id_assegnazione'];
-                                          $id_funz=$elenco_assegnazioni[$azienda_clean][$i]['id_funzionario'];
+                                          $id_funz=strtoupper($elenco_assegnazioni[$azienda_clean][$i]['id_funzionario']);
                                           $data_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['data_assegnazione'];
                                           if (array_key_exists($id_funz,$funzionari)) {
                                             echo "<b>$id_funz</b>: ";
@@ -473,7 +475,7 @@
                                                   $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #00ca00;'></i>";
                                                 $view.="</td>";                                              
                                                 $view.="<td>";
-                                                  $id_funz=$note[$info->posizione][$sca]->id_user;
+                                                  $id_funz=strtoupper($note[$info->posizione][$sca]->id_user);
                                                   //$view.=$id_funz;
 
                                                     if (array_key_exists($id_funz,$funzionari)) {
