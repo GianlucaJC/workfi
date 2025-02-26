@@ -340,8 +340,14 @@
                                     <?php
                                       if (isset($info->posizione) && strlen($info->posizione)>0) {?>
                                         <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-primary btn-sm">Note</button>
-                                    <?php } ?>    
-                                      <button type="button" class="btn btn-secondary btn-sm"  onclick="insert_frt({{$info->ID_anagr}})">
+                                    <?php } 
+                                    
+                                    $btn_col="secondary";
+                                    if (isset($elenco_frt[$info->posizione])) $btn_col="primary";
+                                    ?>    
+
+
+                                      <button type="button" class="btn btn-{{$btn_col}} btn-sm"  onclick="insert_frt({{$info->ID_anagr}})">
                                         
                                         FRT
                                       </button>
@@ -488,7 +494,7 @@
                                           $view.='
                                           </tbody>  
                                         </table>';
-
+                                        echo $view;
                                       }
                                     ?>
 
