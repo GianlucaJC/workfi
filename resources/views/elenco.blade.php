@@ -539,6 +539,7 @@
                           <tr>
                             <th>Azienda</th>
                             <th>Data Ass</th>
+                            <th>Funzionari assegnati</th>
                             <th>Stat</th>
                           </tr>
                         </thead>  
@@ -578,7 +579,24 @@
                                       data-nominativo='{{$info->NOME}}'
                                   >
                               </td>
-                                  </td>                                  
+                              <td>
+                                <?php
+                                  $entr=false;
+                                  if (array_key_exists($azienda_clean,$elenco_assegnazioni)){	
+                                    $entr=true;
+                                    for ($i=0;$i<count($elenco_assegnazioni[$azienda_clean]);$i++) {
+                                      if ($i>0) echo "<hr>";
+                                      $id_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['id_assegnazione'];
+                                      $id_funz=strtoupper($elenco_assegnazioni[$azienda_clean][$i]['id_funzionario']);
+                                      $data_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['data_assegnazione'];
+                                      if (array_key_exists($id_funz,$funzionari)) {
+                                        echo "<b>$id_funz</b>: ";
+                                        echo $funzionari[$id_funz]['utentefillea'];
+                                      }
+                                    }
+                                  }                                     
+                                ?>
+                              </td>                                                            
 
                                   <td style='text-align:left'>
                                     <?php
@@ -605,6 +623,7 @@
                         <tr>
                             <th>Nominativo</th>
                             <th>Data Ass</th>
+                            <th>Funzionari assegnati</th>
                             <th>Stat</th>
                           </tr>                          
                         </tfoot>
