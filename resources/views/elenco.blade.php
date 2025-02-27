@@ -342,13 +342,13 @@
                                   <td id='frt_{{$info->ID_anagr}}'>
                                     <?php
                                       $btn_col="secondary";
-                                      if (isset($note[$info->posizione])) $btn_col="primary";
+                                      if (isset($note[$info->posizione])) $btn_col="danger";
                                       if (isset($info->posizione) && strlen($info->posizione)>0) {?>
                                         <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-{{$btn_col}} btn-sm">Note</button>
                                     <?php } 
                                     
                                     $btn_col="secondary";
-                                    if (isset($elenco_frt[$info->posizione])) $btn_col="primary";
+                                    if (isset($elenco_frt[$info->posizione])) $btn_col="danger";
                                     ?>    
 
 
