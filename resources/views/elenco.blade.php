@@ -173,9 +173,12 @@
                     <input type='hidden' name='tipo_view' id='tipo_view' value='{{$tipo_view}}'>
                     <input type='hidden' name='op_az' id='op_az' value='{{$op_az}}'>
                     <input type='hidden' name='filtro_colore' id='filtro_colore' value='{{$filtro_colore}}'>
-
+                    <?php
+                      $vis="";
+                      if ($op_az!='op') $vis="display:none";
+                    ?>
                     <div id="div_table">
-                      <div class="filtraggio">
+                      <div class="filtraggio" id='div_filtri' style="{{$vis}}">
                         <div class="filtri" class='mb-3'>
                           <label for="filtro_note">Filtro note</label> 
                           <select class="form-select" style='background-color:white;border:1px solid;padding:4px;border-radius:5px;border-color:gray' aria-label="Default select example" name="filtro_note" id="filtro_note" onchange="$('#frm_main').submit()">
