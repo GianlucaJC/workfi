@@ -391,7 +391,7 @@
                                       
                                       <?php
                                       $pref="https://www.filleaoffice.it";
-                                      if ($_SERVER["HTTP_HOST"]=="localhost")
+                                      if ($_SERVER["HTTP_HOST"]=="localhost:8012")
                                           $pref="http://localhost/";
 
                                       if (strlen($p_iva)!=0)
