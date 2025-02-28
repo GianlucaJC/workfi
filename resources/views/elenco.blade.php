@@ -395,9 +395,9 @@
                                           $pref="http://localhost/";
 
                                       if (strlen($p_iva)!=0)
-                                        echo "<a href='".$pref."/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&p_iva=".$p_iva."' target='_blank'>$azienda</a>";      
+                                        echo "<a href='".$pref."/anagrafe/pages/consultazioni/consultazioni.php?token=".$token."&tb_fo=t2_tosc_a&p_iva=".$p_iva."' target='_blank'>$azienda</a>";      
                                       else
-                                        echo "<a href='".$pref."/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&azienda=".$azienda."' target='_blank'>$azienda</a>";   
+                                        echo "<a href='".$pref."/anagrafe/pages/consultazioni/consultazioni.php?token=".$token."&tb_fo=t2_tosc_a&azienda=".$azienda."' target='_blank'>$azienda</a>";   
                                       ?>                                         
                                   </td>
                                   <td>
