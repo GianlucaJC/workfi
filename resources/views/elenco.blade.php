@@ -390,10 +390,14 @@
                                   <td>
                                       
                                       <?php
+                                      $pref="https://www.filleaoffice.it";
+                                      if ($_SERVER["HTTP_HOST"]=="localhost")
+                                          $pref="http://localhost/";
+
                                       if (strlen($p_iva)!=0)
-                                      echo "<a href='https://www.filleaoffice.it/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&p_iva=".$p_iva."' target='_blank'>$azienda</a>";      
-                                    else
-                                       echo "<a href='https://www.filleaoffice.it/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&azienda=".$azienda."' target='_blank'>$azienda</a>";   
+                                        echo "<a href='".$pref."/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&p_iva=".$p_iva."' target='_blank'>$azienda</a>";      
+                                      else
+                                        echo "<a href='".$pref."/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&azienda=".$azienda."' target='_blank'>$azienda</a>";   
                                       ?>                                         
                                   </td>
                                   <td>
@@ -562,10 +566,20 @@
                                     $azienda_js=str_replace("'","[",$azienda);
                                     $azienda_js=str_replace("&","^",$azienda_js);
                                     if (strlen($azienda)>20) $azienda_view=substr($azienda,0,18)."<br>".substr($azienda,19);
+                                    $timestamp = time() + 60*60; // now + 1 hour
+                                    $str=strtoupper($user)."|$timestamp";
+                                    $token=base64_encode($str);
+                                    
+
+
+                                    $pref="https://www.filleaoffice.it";
+                                    if ($_SERVER["HTTP_HOST"]=="localhost:8012")
+                                        $pref="http://localhost/";
+
                                     if (strlen($p_iva)!=0)
-                                      echo "<a href='https://www.filleaoffice.it/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&p_iva=".$p_iva."' target='_blank'>$azienda</a>";      
+                                      echo "<a href='$pref/anagrafe/pages/consultazioni/consultazioni.php?token=".$token."&tb_fo=t2_tosc_a&p_iva=".$p_iva."' target='_blank'>$azienda</a>";      
                                     else
-                                       echo "<a href='https://www.filleaoffice.it/anagrafe/pages/consultazioni/consultazioni.php?tb_fo=t2_tosc_a&azienda=".$azienda."' target='_blank'>$azienda</a>";      
+                                       echo "<a href='$pref/anagrafe/pages/consultazioni/consultazioni.php?token=".$token."&tb_fo=t2_tosc_a&azienda=".$azienda."' target='_blank'>$azienda</a>";      
                                     /*
                                     echo "<a href='javascript:void(0)' onclick=\"view_lav('$azienda_js')\">
                                            <span title='$azienda_view'>$azienda_view</span>
