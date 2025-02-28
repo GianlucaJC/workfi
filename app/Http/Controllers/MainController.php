@@ -22,28 +22,13 @@ class mainController extends Controller
 		$this->isadmin=0;
 	}	
 
-	public function genera_token() {
-		$timestamp = time()+ 60*60; // token scadente tra un'ora
-		//$timestamp = time()- 1*60; // esempio token scaduto (-1min)
-		$str="F0001|$timestamp|1";
-		$enc=base64_encode($str);
-		return $enc;
-	}
+
+	
     public function main($token="",$dataass=""){	
 		
 		$request=Request();
-	  	//$token = bin2hex(random_bytes(16)); 
-	  	//echo $token;
-		
-		//struttura token: Tessera|time expire(un'ora)|isadmin
-		//es: http://localhost:8012/workfi/public/main/RjAwMDF8MTc0MDczOTkwOXwx in cui il token "F0001|$timestamp|1
-		/*
-		////per entrare direttamente decommentare queste linee e servirsi della url generata e ridecommentare
-		$token=$this->genera_token(); 
-		echo "http://localhost:8012/workfi/public/main/$token";
-		*/
-		
 
+		//vedi token_worfi.php (desktop) oppure genera un url valido da filleaoffice online
 		if (strlen($token)==0) 
 			return $this->redirect_url();
 		else {
