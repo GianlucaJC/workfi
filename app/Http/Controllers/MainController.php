@@ -17,61 +17,53 @@ class mainController extends Controller
 {
 	public function __construct(){
 		
-		/*
-			per login rapido prendere il login_laravel in online.db nella relativa tessera di accesso
-			ed appenderlo alla url di workfi es:
-			in locale: http://localhost:8012/workfi/public/main/81de27c50e806b9477edb63f45124108
-		*/
-		//?workfi=1 //per farlo rientrare direttamente in workfi...eliminato perchè da luogo a bug
 		$this->redirect="https://www.filleaoffice.it/homeFO/enter/index.php";
+		$this->user=null;
+		$this->isadmin=0;
 	}	
 
-
-    public function main($token="",$dataass=""){		
+	public function genera_token() {
+		$timestamp = time()+ 60*60; // token scadente tra un'ora
+		//$timestamp = time()- 1*60; // esempio token scaduto (-1min)
+		$str="F0001|$timestamp|1";
+		$enc=base64_encode($str);
+		return $enc;
+	}
+    public function main($token="",$dataass=""){	
+		
 		$request=Request();
 	  	//$token = bin2hex(random_bytes(16)); 
 	  	//echo $token;
+		
+		//struttura token: Tessera|time expire(un'ora)|isadmin
+		//es: http://localhost:8012/workfi/public/main/RjAwMDF8MTc0MDczOTkwOXwx in cui il token "F0001|$timestamp|1
+		/*
+		////per entrare direttamente decommentare queste linee e servirsi della url generata e ridecommentare
+		$token=$this->genera_token(); 
+		echo "http://localhost:8012/workfi/public/main/$token";
+		*/
+		
 
-		if (strlen($token)==0) {
-			if ($request->session()->has('token')) return $this->redirect_url();
-		} else {
-			$from_fo=explode("|",$token);
-			if (isset($from_fo[1])) {
-				//in caso di token inviato e diverso dalla sessione in corso ->redirect!
-				if ($request->session()->has('token')) {
-					$token_s=$request->session()->get('token');
-					if ($token_s!=$token) {
-						return $this->redirect_url();
-					}
+		if (strlen($token)==0) 
+			return $this->redirect_url();
+		else {
+			$decode=base64_decode($token);
+			$info_token=explode("|",$decode);
+			if (!isset($info_token[1])) return $this->redirect_url();
+			else {
+				if (time()>$info_token[1])  return $this->redirect_url(); //token expired!
+				else {
+					$user=$info_token[0];
+					$isadmin=$info_token[2];
+					$this->user=$user;
+					$this->isadmin=$isadmin;
+					return $this->elenco($token,$dataass);
 				}
 			}
+
 		}
 		
-		
-		if (strlen($token)==0) return $this->redirect_url();
-		
-
-		$info=DB::table('online.db')
-		->select("N_TESSERA","ATTIVA","PIN")
-		->where('token_laravel','=',$token)
-		->first();
-		
-		
-	  	
-		if (!($request->session()->has('id'))) {
-			if (isset($info->ATTIVA)) {
-					if ($info->ATTIVA=="1") {
-						$user=$info->N_TESSERA;
-						$request->session()->put('id',$user);
-						$request->session()->put('token',$token);
-						return $this->elenco($token,$dataass);
-					} else {
-						return $this->redirect_url();
-					}
-			} else {
-				return $this->redirect_url();
-			}
-		} else return $this->elenco($token,$dataass);
+		 
     }	
 
 	public function note() {
@@ -89,15 +81,11 @@ class mainController extends Controller
 
 	public function elenco($token,$dataass) {
 		$request=Request();
-		$count=DB::table('online.db')->select("is_admin_workfi")->where('token_laravel','=',$token)->count();
-		if ($count==0) {
-			return $this->redirect_url();
-		}
-		$info=DB::table('online.db')->select("is_admin_workfi")->where('token_laravel','=',$token)->first();
-		$isadmin=$info->is_admin_workfi;
+
+		$isadmin=$this->isadmin;
+		$user=$this->user;
 
 
-		$user=$request->session()->get('id');
 		$filtro_note=$request->input('filtro_note');
 		
 		$tipo_view=$request->input('tipo_view');
@@ -179,12 +167,9 @@ class mainController extends Controller
 		$elenco_frt=$this->elenco_frt();
 		
 		$stat_azi=$this->stat_azi();
-
-		
-		$solo_pref=1;
 	
 
-		return view('elenco',compact('token','dataass','elenco','isadmin','user','solo_pref','tipo_view','op_az','note','funzionari','elenco_assegnazioni','elenco_frt','stat_azi','info_altrove','filtro_note','filtro_colore'));
+		return view('elenco',compact('token','dataass','elenco','isadmin','user','tipo_view','op_az','note','funzionari','elenco_assegnazioni','elenco_frt','stat_azi','info_altrove','filtro_note','filtro_colore'));
 
    }	
 
@@ -337,10 +322,6 @@ class mainController extends Controller
 	}
 
 	public function redirect_url() {
-		$request=Request();
-		$request->session()->forget('id');
-		$request->session()->forget('token');
-
 		return redirect()->away($this->redirect);		
 	}
 
