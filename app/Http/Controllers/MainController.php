@@ -39,6 +39,7 @@ class mainController extends Controller
 				if (time()>$info_token[1])  return $this->redirect_url(); //token expired!
 				else {
 					$user=$info_token[0];
+					$this->log_w($user,$token);
 					$isadmin=$info_token[2];
 					$this->user=$user;
 					$this->isadmin=$isadmin;
@@ -50,6 +51,16 @@ class mainController extends Controller
 		
 		 
     }	
+
+	public function log_w($user,$token) {
+		$check=DB::table('bsfi.accessi_workfi')
+		->select("id")
+		->where('token','=',$token)
+		->count();
+		if ($check==0) {
+			DB::insert('insert into bsfi.accessi_workfi (id_funzionario, token) values (?, ?)', [$user, $token]);
+		}
+	}
 
 	public function note() {
 		$elenco=DB::table('bsfi.note')
