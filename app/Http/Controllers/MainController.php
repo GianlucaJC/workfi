@@ -109,7 +109,7 @@ class mainController extends Controller
 			->when(strlen($data_sca)==10, function ($elenco) use($data_sca){			
 				return $elenco->where('data_scarico',$data_sca);
 			})	
-			->whereNotNull('id_import')
+			//->whereNotNull('id_import')
 			->groupBy('denom')
 			->get();			
 		}
