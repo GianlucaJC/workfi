@@ -40,14 +40,16 @@ class AjaxController extends Controller
    }
 
    public function ins_frt(Request $request) {
+          $operatore=$request->input('user_ref');
           $nome_frt=$request->input('nome_frt');
           $natoil_frt=$request->input('natoil_frt');
           $codfisc_frt=$request->input('codfisc_frt');
           $tel_frt=$request->input('tel_frt');
           $sesso_frt=$request->input('sesso_frt');
           $sind_frt=$request->input('sind_frt');
-          $ente_frt=$request->input('ente_frt');
-          $operatore=$request->session()->get('id');
+          
+          $ente_frt="workfi";
+
 
 
 
@@ -74,10 +76,10 @@ class AjaxController extends Controller
           $frt->telefono=$tel_frt;
           $frt->sesso=$sesso_frt;
           $frt->sindacato=$sind_frt;
-          $frt->tb_fo="t4_lazi_a";
-          $frt->tb_user="t4_lazi_a";
+          $frt->tb_fo="t2_tosc_a";
+          $frt->tb_user="t2_tosc_a";
           $frt->semestre=0;
-          $frt->dati_grezzi="Delega FRT da RM_Office";
+          $frt->dati_grezzi="Delega FRT da Workfi";
           $frt->ente_origine=$ente_frt;
           $frt->save();
 

@@ -141,6 +141,7 @@
 
          <!-- Page Content -->
         <main>
+        <input type="hidden" name='user_ref' id='user_ref' value="{{$user}}">
 
               @if ($isadmin==1 || 1==1)     
                 <div class="container-fluid mt-3">
