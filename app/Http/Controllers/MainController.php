@@ -202,8 +202,9 @@ class mainController extends Controller
 		foreach($elenco as $risposta) {
 			$azienda=$risposta->azienda;
 			if ($old!=$azienda) {
-				$sca=0;$old=$azienda;
+				$sca=0;
 			}
+			$old=$azienda;
 			$id_assegnazione=$risposta->id;
 			$id_funzionario=strtoupper($risposta->id_funzionario);
 			$data_assegnazione=$risposta->data_assegnazione;
