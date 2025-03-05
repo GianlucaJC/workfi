@@ -117,7 +117,9 @@ class mainController extends Controller
 		else {
 			$elenco=DB::table('anagrafe.t2_tosc_a as t')
 			->select("*")
-			->where('is_anomal','=',$anomali)
+			->when($anomali==1, function ($elenco) {			
+				return $elenco->where('t.is_anomal','=',1);
+			})
 			->when(strlen($filtro_colore)!=0, function($elenco) use ($filtro_colore) {
 				return $elenco->where('t.stato_lav',"=",$filtro_colore);
 			})			
@@ -255,6 +257,7 @@ class mainController extends Controller
 	function stat_azi() {
 		$elenco=DB::table('anagrafe.t2_tosc_a')
 		->select("denom")
+		->whereRaw('LENGTH(denom) > ?', [0])
 		->whereNotNull('id_import')
 		->groupby('denom')
 		->get();
