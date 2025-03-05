@@ -81,7 +81,8 @@ class mainController extends Controller
 		$isadmin=$this->isadmin;
 		$user=$this->user;
 
-
+		$anomali=$request->input('anomali');
+		if (strlen($anomali)==0) $anomali=0;
 		$filtro_note=$request->input('filtro_note');
 		
 		$tipo_view=$request->input('tipo_view');
@@ -116,6 +117,7 @@ class mainController extends Controller
 		else {
 			$elenco=DB::table('anagrafe.t2_tosc_a as t')
 			->select("*")
+			->where('is_anomal','=',$anomali)
 			->when(strlen($filtro_colore)!=0, function($elenco) use ($filtro_colore) {
 				return $elenco->where('t.stato_lav',"=",$filtro_colore);
 			})			
@@ -165,7 +167,7 @@ class mainController extends Controller
 		$stat_azi=$this->stat_azi();
 	
 
-		return view('elenco',compact('token','dataass','elenco','isadmin','user','tipo_view','op_az','note','funzionari','elenco_assegnazioni','elenco_frt','stat_azi','info_altrove','filtro_note','filtro_colore'));
+		return view('elenco',compact('token','dataass','elenco','isadmin','user','tipo_view','op_az','note','funzionari','elenco_assegnazioni','elenco_frt','stat_azi','info_altrove','filtro_note','filtro_colore','anomali'));
 
    }	
 

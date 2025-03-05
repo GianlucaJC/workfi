@@ -38,7 +38,9 @@
             table-layout: fixed; // ***********add this
             word-wrap:break-word; // ***********and this
           }
-
+          .row_red {
+            background-color: orange;
+          }
 
 
         </style>
@@ -174,6 +176,7 @@
                     <input type='hidden' name='tipo_view' id='tipo_view' value='{{$tipo_view}}'>
                     <input type='hidden' name='op_az' id='op_az' value='{{$op_az}}'>
                     <input type='hidden' name='filtro_colore' id='filtro_colore' value='{{$filtro_colore}}'>
+                    <input type='hidden' name='anomali' id='anomali' value='{{$anomali}}'>
                     <?php
                       $vis="";
                       if ($op_az!='op') $vis="display:none";
@@ -193,6 +196,13 @@
                             @if ($filtro_note=='0') selected @endif
                             >Senza note</option>
                           </select>
+                        </div>
+                        <div class='filtri'>
+                          <?php 
+                            $st_anom="-outline";
+                            if ($anomali==1) $st_anom="";
+                          ?>  
+                          <button type="submit" onclick="if ($('#anomali').val()==0) $('#anomali').val(1); else $('#anomali').val(0) " class="btn btn{{$st_anom}}-primary">Anomali</button>
                         </div>
                           <div class='filtri'>
                           <?php
@@ -262,10 +272,13 @@
                               $azienda=$info->DENOM;
                               $azienda_clean=str_replace("'","",$azienda);
                               $azienda_clean=str_replace('"',"",$azienda_clean);                          
+                              $is_anomal=$info->is_anomal;
+                              $cl_ref="";
+                              if ($is_anomal==1) $cl_ref="row_red";
                             ?>
 
                               <tr id='tr{{$info->ID_anagr}}'>
-                                  <td>
+                                  <td class="{{$cl_ref}}">
                                     <?php
                                       $nome_orig=$info->NOME;
                                       $nominativo=$nome_orig;
@@ -293,7 +306,7 @@
 
                                   </td>
 
-                                  <td>
+                                  <td class="{{$cl_ref}}">
                                     {{$info->data_scarico}}
                                   </td>                                  
 
