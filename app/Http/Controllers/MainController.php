@@ -272,30 +272,35 @@ class mainController extends Controller
 			->where('denom','=',$azienda)
 			->where('sindacato','=',0)
 			->where('attivi','=',"S")
+			->whereNull("id_import")
 			->count();
 
 			$filca=DB::table('anagrafe.t2_tosc_a')
 			->where('denom','=',$azienda)
 			->where('sindacato','=',2)
 			->where('attivi','=',"S")
+			->whereNull("id_import")
 			->count();			
 
 			$feneal=DB::table('anagrafe.t2_tosc_a')
 			->where('denom','=',$azienda)
 			->where('sindacato','=',3)
 			->where('attivi','=',"S")
+			->whereNull("id_import")
 			->count();			
 
 			$fillea=DB::table('anagrafe.t2_tosc_a')
 			->where('denom','=',$azienda)
 			->where('sindacato','=',1)
 			->where('attivi','=',"S")
+			->whereNull("id_import")
 			->count();		
 			
 			$n_spec=DB::table('anagrafe.t2_tosc_a')
 			->where('denom','=',$azienda)
 			->where('sindacato','=',' ')
 			->where('attivi','=',"S")
+			->whereNull("id_import")
 			->count();		
 			
 			if ($liberi>0) $res[$azienda_clean]['liberi']=$liberi;
