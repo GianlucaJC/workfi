@@ -302,7 +302,15 @@
                                         @if ($info->stato_lav=="3")
                                         <i class="fas fa-circle fa-lg mt-3" style="color: #00ca00;" id="sem3" @click='set_stato(3)'></i>
                                         @endif
-                                    </span>    
+                                    </span>   
+                                    <?php
+                                      if (isset($cantieri[$p_iva])) {?>
+                                          <span class='ml-2' style="float: right">
+                                            <i class="fas fa-hard-hat"></i>
+                                          </span>
+                                      <?php } ?>
+                                      
+                                  
 
                                   </td>
 

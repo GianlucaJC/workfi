@@ -76,6 +76,7 @@ class mainController extends Controller
 	}
 
 	public function elenco($token,$dataass) {
+
 		$request=Request();
 
 		$isadmin=$this->isadmin;
@@ -163,16 +164,28 @@ class mainController extends Controller
 
 		$note=$this->note();
 		$funzionari=$this->funzionari();
+		$cantieri=$this->cantieri();
 		$elenco_assegnazioni=$this->elenco_assegnazioni('all');
 		$elenco_frt=$this->elenco_frt();
 		
 		$stat_azi=$this->stat_azi();
 	
 
-		return view('elenco',compact('token','dataass','elenco','isadmin','user','tipo_view','op_az','note','funzionari','elenco_assegnazioni','elenco_frt','stat_azi','info_altrove','filtro_note','filtro_colore','anomali'));
+		return view('elenco',compact('token','dataass','elenco','isadmin','user','tipo_view','op_az','note','funzionari','elenco_assegnazioni','elenco_frt','stat_azi','info_altrove','filtro_note','filtro_colore','anomali','cantieri'));
 
    }	
 
+   public function cantieri() {
+		$info = DB::table('bsfi.cantieri')
+		->select("id","p_iva","denom","indirizzo","civico","comune","inizio_lav","fine_lav","id_import","data_forzata")
+		->get();
+		$cant=array();
+
+		foreach($info as $cantiere) {
+			$cant[$cantiere->p_iva]=$cantiere;
+		}
+		return $cant;	
+   }
 
    public function funzionari() {
 		$info = DB::table('online.db')
