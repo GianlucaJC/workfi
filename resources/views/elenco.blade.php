@@ -304,9 +304,15 @@
                                         @endif
                                     </span>   
                                     <?php
-                                      if (isset($cantieri[$p_iva])) {?>
+                                      if (isset($cantieri[$p_iva])) {
+                                          $indir=$cantieri[$p_iva]->indirizzo;
+                                          $indir.=" ".$cantieri[$p_iva]->civico;
+                                          $indir.=" ".$cantieri[$p_iva]->comune;
+                                          ?>
                                           <span class='ml-2' style="float: right">
+                                            <a href="http://maps.google.com/?q={{$indir}}" target='_blank'>  
                                             <i class="fas fa-hard-hat"></i>
+                                            </a>
                                           </span>
                                       <?php } ?>
                                       
