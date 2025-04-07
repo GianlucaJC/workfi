@@ -311,7 +311,7 @@
                                           ?>
                                           <span class='ml-2' style="float: right">
                                             <a href="http://maps.google.com/?q={{$indir}}" target='_blank'>  
-                                            <i class="fas fa-hard-hat"></i>
+                                            <font color='red'><i class="fas fa-hard-hat"></i></font>
                                             </a>
                                           </span>
                                       <?php } ?>
@@ -622,7 +622,7 @@
                                       ?>
                                       <span class='ml-2' style="float: right">
                                         <a href="http://maps.google.com/?q={{$indir}}" target='_blank'>  
-                                        <i class="fas fa-hard-hat"></i>
+                                        <font color='red'><i class="fas fa-hard-hat"></i></font>
                                         </a>
                                       </span>
                                   <?php }  ?>                                
