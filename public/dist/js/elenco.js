@@ -229,7 +229,7 @@ function save_frt() {
 		$.ajax({
 			type: 'POST',
 			url: base_path+"/ins_frt",
-			data: {_token: CSRF_TOKEN,user_ref:user_ref,nome_frt:nome_frt,natoil_frt:natoil_frt,codfisc_frt:codfisc_frt,sesso_frt:sesso_frt,sind_frt:sind_frt,ente_frt:ente_frt,tel_frt:tel_frt},
+			data: {_token: CSRF_TOKEN,id_anagr:ref_edit_frt,user_ref:user_ref,nome_frt:nome_frt,natoil_frt:natoil_frt,codfisc_frt:codfisc_frt,sesso_frt:sesso_frt,sind_frt:sind_frt,ente_frt:ente_frt,tel_frt:tel_frt},
 			success: function (data) {
 				html="";
 				html+=`<a href='#' onclick="$('#frm_main').submit()">

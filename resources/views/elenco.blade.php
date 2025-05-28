@@ -212,7 +212,13 @@
                             if ($filtro_colore=="3") $cl3="fas";
                           ?>  
 
-                            <div>
+                          <div>
+                          <div class='filtri'>
+                            @if ($isadmin==1)
+                              <button type="submit" name='dele_green' onclick="if (!confirm('Si conferma la cancellazione?')) {event.preventDefault();event.stopPropagation()}" value="1" class="btn btn-outline-success">Elimina tutti con pallino verde</button>
+                            @endif
+                          </div>
+
                             <a href='javascript:void(0)' onclick='set_filtro_stato(1)'>
                             <i class="{{$cl1}} fa-circle fa-lg mt-3 semaforo" style="color: #ff0000;" id="sem1"></i>
                             </a>

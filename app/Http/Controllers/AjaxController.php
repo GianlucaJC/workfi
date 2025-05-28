@@ -40,6 +40,7 @@ class AjaxController extends Controller
    }
 
    public function ins_frt(Request $request) {
+          $id_anagr=$request->input('id_anagr');
           $operatore=$request->input('user_ref');
           $nome_frt=$request->input('nome_frt');
           $natoil_frt=$request->input('natoil_frt');
@@ -55,7 +56,10 @@ class AjaxController extends Controller
 
           $today=date("Y-m-d");
           
-          
+          $up_green=DB::table('anagrafe.t2_tosc_a')
+          ->where('ID_anagr', '=',$id_anagr)
+          ->update(['stato_lav' => 3]);
+
           $info = DB::table('online.db')
           ->select('id')
           ->where('N_TESSERA','=',$operatore)

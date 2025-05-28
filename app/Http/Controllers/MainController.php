@@ -78,10 +78,15 @@ class mainController extends Controller
 	public function elenco($token,$dataass) {
 
 		$request=Request();
-
+		$d=date("Y-m-d");
 		$isadmin=$this->isadmin;
 		$user=$this->user;
-
+		$dele_green=$request->input('dele_green');
+		if (strlen($dele_green)>0) {
+			$elenco=DB::table('anagrafe.t2_tosc_a')
+			->where('stato_lav', '=',3)
+			->update(['dele_workfi' => 1,'data_elimina' => $d]);
+		}
 		$anomali=$request->input('anomali');
 		if (strlen($anomali)==0) $anomali=0;
 		$filtro_note=$request->input('filtro_note');
@@ -118,6 +123,7 @@ class mainController extends Controller
 		else {
 			$elenco=DB::table('anagrafe.t2_tosc_a as t')
 			->select("*")
+			->where('t.dele_workfi','=',0)
 			->when($anomali==1, function ($elenco) {			
 				return $elenco->where('t.is_anomal','=',1);
 			})
