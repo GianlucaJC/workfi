@@ -66,12 +66,18 @@ class mainController extends Controller
 		$elenco=DB::table('bsfi.note')
 		->select("*")->orderBy('created_at','desc')
 		->get();
-		$info=array();
+		$note_l=array();$note_a=array();
 		foreach ($elenco as $nota) {
 			$codlav=$nota->codlav;
-			$info[$codlav][]=$nota;
+			$azienda=$nota->azienda;
+			$note_l[$codlav][]=$nota;
+			if ($azienda!=null && strlen($azienda)>0) 
+				$note_a[$azienda][]=$nota;
 		}
-		return $info;
+		$note=array();
+		$note['note_l']=$note_l;
+		$note['note_a']=$note_a;
+		return $note;
 
 	}
 

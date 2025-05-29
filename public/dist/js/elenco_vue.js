@@ -31,8 +31,8 @@ var app = Vue.component('App',{
                 <p v-if='savewait==true'>
                     <i class="fas fa-spinner fa-spin"></i>
                 </p>
-                <button type="button" v-if="isnew==false" class="btn btn-success" @click="save_nota()">Salva</button>
-				
+                <button type="button" v-if="isnew==false" class="btn btn-success" @click="save_nota(1)">Salva</button>
+                <button type="button" v-if="isnew==false" class="btn btn-success" @click="save_nota(2)">Salva nota per tutta l'azienda</button>				
 				
                 <button type="button" class="ml-2 btn btn-secondary" @click='close_edit()'>Torna all'elenco</button>
             </div>
@@ -168,13 +168,16 @@ var app = Vue.component('App',{
 
 		},
 		
-		save_nota() {
+		save_nota(from) {
             base_path = $("#url").val();
             check=this.check_ins()
             if (check==false) {
                 alert("Attenzione! Compilare tutti i campi contrassegnati con * e la correttezza dei dati")
                 return false
             }
+			if (from=="2") {
+				if (!confirm("Sicuri di creare la nota per tutta l'azienda?")) return false
+			}
 			var self = this;
 
             this.savewait=true    
@@ -189,7 +192,7 @@ var app = Vue.component('App',{
 						"Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
 						"X-CSRF-Token": csrf
 					},
-					body: "user="+self.user+"&codlav="+self.codlav+"&testo_nota="+self.testo_nota
+					body: "user="+self.user+"&codlav="+self.codlav+"&testo_nota="+self.testo_nota+'&from='+from
 				})
 				.then(response => {
 					if (response.ok) {

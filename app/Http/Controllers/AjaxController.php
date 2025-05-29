@@ -22,18 +22,37 @@ class AjaxController extends Controller
         $user=$request->input('user');
         $codlav=$request->input('codlav');
         $testo_nota=$request->input('testo_nota');
+        $from=$request->input('from');
 
-        $note=new note;
-        $note->id_user=$user;
-        $note->codlav=$codlav;
-        $note->note=$testo_nota;
-        $note->save();	
+
         $risp=array();
-
+        $azienda=null;
         DB::table('anagrafe.t2_tosc_a')
          ->where('posizione','=',$codlav)
          ->update(['presenza_note' => 1]);
+        if ($from=="2") {
+          $info = DB::table('anagrafe.t2_tosc_a')
+          ->select('denom')
+          ->where('posizione','=',$codlav)
+          ->first();
+          
+          if($info) {
+             $azienda=$info->denom;
+             DB::table('anagrafe.t2_tosc_a')
+               ->where('denom','=',$azienda)
+               ->update(['presenza_note' => 1]);
+          }
+        }
+        $note=new note;
+        $note->id_user=$user;
         
+        if ($from=='2') {
+          $note->azienda=$azienda;
+          $note->codlav="NotaA";
+        } else $note->codlav=$codlav;
+        $note->note=$testo_nota;
+        $note->save();	
+
          $risp['esito']="OK";
         
         return json_encode($risp);	

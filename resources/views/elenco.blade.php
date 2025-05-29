@@ -130,7 +130,10 @@
       }
 
     </style>
-
+    <?php
+      $note_l=$note['note_l'];$note_a=$note['note_a'];
+      
+    ?>
     <body class="font-sans antialiased">
 
         <div class="min-h-screen bg-gray-100">
@@ -289,7 +292,7 @@
                                       $nome_orig=$info->NOME;
                                       $nominativo=$nome_orig;
                                       if (strlen($nome_orig)>18) $nominativo=substr($nome_orig,0,18)."<br>".substr($nome_orig,19);
-                                      if (isset($note[$info->posizione])) echo "<b>".$nominativo."</b>";
+                                      if (isset($note_l[$info->posizione])) echo "<b>".$nominativo."</b>";
                                       else  {
                                         echo "<span title='$nome_orig'>";
                                         
@@ -376,8 +379,10 @@
                                   <td id='frt_{{$info->ID_anagr}}'>
                                     <?php
                                       $btn_col="secondary";
-                                      if (isset($note[$info->posizione])) $btn_col="danger";
-                                      if (isset($info->posizione) && strlen($info->posizione)>0) {?>
+                                    
+                                      if (isset($note_l[$info->posizione]) || isset($note_a[$azienda])) $btn_col="danger";
+                                      if (isset($info->posizione) && strlen($info->posizione)>0) {
+                                      ?>
                                         <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-{{$btn_col}} btn-sm">Note</button>
                                     <?php } 
                                     
@@ -494,7 +499,14 @@
                                   </td>
                                   <td>
                                     <?php
-                                      if (isset($note[$info->posizione])) {
+                                      if (isset($note_l[$info->posizione]) || isset($note_a[$info->DENOM])) {
+                                        if (isset($note_l[$info->posizione])) {
+                                          $arr_ref=$note_l;$indice_ref=$info->posizione;
+                                        }
+                                        if (isset($note_a[$info->DENOM])) {
+                                          $arr_ref=$note_a;$indice_ref=$info->DENOM;
+                                        }
+                                        
                                         $view='<table class="table">
                                           <thead>
                                             <tr>
@@ -505,18 +517,18 @@
                                             </tr>
                                           </thead>
                                           <tbody>';
-                                            for ($sca=0;$sca<count($note[$info->posizione]);$sca++) {
+                                            for ($sca=0;$sca<count($arr_ref[$indice_ref]);$sca++) {
                                               $view.="<tr>";
                                                   $view.="<td style='width:30px'>";
-                                                  if  ($note[$info->posizione][$sca]->stato_nota=="1")
+                                                  if  ($arr_ref[$indice_ref][$sca]->stato_nota=="1")
                                                   $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #ff0000;'></i>";
-                                                if  ($note[$info->posizione][$sca]->stato_nota=="2")
+                                                if  ($arr_ref[$indice_ref][$sca]->stato_nota=="2")
                                                   $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #FFD43B;'></i>";
-                                                if  ($note[$info->posizione][$sca]->stato_nota=="3")
+                                                if  ($arr_ref[$indice_ref][$sca]->stato_nota=="3")
                                                   $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #00ca00;'></i>";
                                                 $view.="</td>";                                              
                                                 $view.="<td>";
-                                                  $id_funz=strtoupper($note[$info->posizione][$sca]->id_user);
+                                                  $id_funz=strtoupper($arr_ref[$indice_ref][$sca]->id_user);
                                                   //$view.=$id_funz;
 
                                                     if (array_key_exists($id_funz,$funzionari)) {
@@ -526,10 +538,10 @@
                                                                    
                                                 $view.="</td>";
                                                 $view.="<td style='white-space:wrap'>";
-                                                  $view.="<i>".$note[$info->posizione][$sca]->note."</i>";
+                                                  $view.="<i>".$arr_ref[$indice_ref][$sca]->note."</i>";
                                                 $view.="</td>";
                                                 $view.="<td>";
-                                                  $view.=$note[$info->posizione][$sca]->created_at;
+                                                  $view.=$arr_ref[$indice_ref][$sca]->created_at;
                                                 $view.="</td>";                                                
 
                                               $view.="</tr>";  
@@ -537,7 +549,10 @@
                                           $view.='
                                           </tbody>  
                                         </table>';
+                                        
                                         echo $view;
+                                       
+                                       
                                       }
                                     ?>
 
