@@ -192,9 +192,11 @@ class mainController extends Controller
 		->select("id","p_iva","denom","indirizzo","civico","comune","inizio_lav","fine_lav","id_import","data_forzata")
 		->get();
 		$cant=array();
-
+		$indice=0;
 		foreach($info as $cantiere) {
-			$cant[$cantiere->p_iva]=$cantiere;
+			if (!isset($cant[$cantiere->p_iva])) $indice=0;
+			else $indice=count($cant[$cantiere->p_iva]);
+			$cant[$cantiere->p_iva][$indice]=$cantiere;
 		}
 		return $cant;	
    }

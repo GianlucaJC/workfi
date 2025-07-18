@@ -30,6 +30,13 @@
         <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
         <style>
+          .avatar {
+              vertical-align: middle;
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              margin-left:15px;
+          }        
           table{
             margin: 0 auto;
             width: 100%;
@@ -314,16 +321,20 @@
                                     </span>   
                                     <?php
                                       if (isset($cantieri[$p_iva])) {
-                                          $indir=$cantieri[$p_iva]->indirizzo;
-                                          $indir.=" ".$cantieri[$p_iva]->civico;
-                                          $indir.=" ".$cantieri[$p_iva]->comune;
+                                          for ($s_c=0;$s_c<count($cantieri[$p_iva]);$s_c++) {
+                                          $indir=$cantieri[$p_iva][$s_c]->indirizzo;
+                                          $indir.=" ".$cantieri[$p_iva][$s_c]->civico;
+                                          $indir.=" ".$cantieri[$p_iva][$s_c]->comune;
                                           ?>
                                           <span class='ml-2' style="float: right">
                                             <a href="http://maps.google.com/?q={{$indir}}" target='_blank'>  
                                             <font color='red'><i class="fas fa-hard-hat"></i></font>
                                             </a>
                                           </span>
-                                      <?php } ?>
+                                        
+                                      <?php }
+                                      }
+                                      ?>
                                       
                                   
 
@@ -831,6 +842,7 @@
                   $view.="<td>";
                     $view.=$frt_dati['utente'];
                     if (isset($user_frt[$frt_dati['utente']])) {
+                      $view.="<img src='".URL::asset('/')."avatar/numtes.jpg' alt='-' class='avatar'>";
                       $view.="<br><small><i>".$user_frt[$frt_dati['utente']]['utentefillea']."</i></small>";
                       
                       $view.="(".$user_frt[$frt_dati['utente']]['sigla_pr'];
