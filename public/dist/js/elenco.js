@@ -12,6 +12,9 @@ $(document).ready( function () {
       
     tipo_view=$("#tipo_view").val()
     set_table(tipo_view,'tbl_articoli')
+
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 } );
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields

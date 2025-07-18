@@ -326,7 +326,7 @@
                                           $indir.=" ".$cantieri[$p_iva][$s_c]->civico;
                                           $indir.=" ".$cantieri[$p_iva][$s_c]->comune;
                                           ?>
-                                          <span class='ml-2' style="float: right">
+                                          <span class='ml-2' style="float: right"  title="{{$indir}}">
                                             <a href="http://maps.google.com/?q={{$indir}}" target='_blank'>  
                                             <font color='red'><i class="fas fa-hard-hat"></i></font>
                                             </a>
@@ -648,16 +648,19 @@
                                    
                                 
                                   if (isset($cantieri[$p_iva])) {
-                                      $indir=$cantieri[$p_iva]->indirizzo;
-                                      $indir.=" ".$cantieri[$p_iva]->civico;
-                                      $indir.=" ".$cantieri[$p_iva]->comune;
-                                      ?>
-                                      <span class='ml-2' style="float: right">
-                                        <a href="http://maps.google.com/?q={{$indir}}" target='_blank'>  
-                                        <font color='red'><i class="fas fa-hard-hat"></i></font>
-                                        </a>
-                                      </span>
-                                  <?php }  ?>                                
+                                          for ($s_c=0;$s_c<count($cantieri[$p_iva]);$s_c++) {
+                                          $indir=$cantieri[$p_iva][$s_c]->indirizzo;
+                                          $indir.=" ".$cantieri[$p_iva][$s_c]->civico;
+                                          $indir.=" ".$cantieri[$p_iva][$s_c]->comune;
+                                          ?>
+                                          <span class='ml-2' style="float: right" title="{{$indir}}">
+                                            <a href="http://maps.google.com/?q={{$indir}}" target='_blank'>  
+                                            <font color='red'><i class="fas fa-hard-hat"></i></font>
+                                            </a>
+                                          </span>
+
+                                  <?php }
+                                   }  ?>                                
 
                               </td>
                               <td>
