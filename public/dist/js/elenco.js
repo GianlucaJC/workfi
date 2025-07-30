@@ -105,8 +105,12 @@ function set_table(tipo,id_tb) {
            // { "width": "1rem", "targets": [1] }
         ],          
         buttons: [
-			''
-		],		
+            {
+                extend: 'excelHtml5',
+                text: 'Excel',
+
+            }
+        ],	
         initComplete: function () {
             // Apply the search
             this.api()

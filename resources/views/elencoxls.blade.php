@@ -345,67 +345,9 @@
                                   </td>                                  
 
                                   <td>
-                                    <?php
-
-                                    
-                                      if (array_key_exists($azienda_clean,$stat_azi)){
-                                        if (isset($stat_azi[$azienda_clean]['liberi']))
-                                          echo "<i class='fas fa-square fa-sm' style='color: #FFD43B;'> <small>".$stat_azi[$azienda_clean]['liberi']."</small></i> ";
-                                        if (isset($stat_azi[$azienda_clean]['fillea']))
-                                          echo "<i class='fas fa-square fa-sm' style='color: #FF0000;'> <small>".$stat_azi[$azienda_clean]['fillea']."</small></i> ";                                        
-                                        if (isset($stat_azi[$azienda_clean]['filca']))
-                                          echo "<i class='fas fa-square fa-sm' style='color: #63E6BE;'> <small>".$stat_azi[$azienda_clean]['filca']."</small></i> ";
-                                        if (isset($stat_azi[$azienda_clean]['feneal']))
-                                          echo "<i class='fas fa-square fa-sm' style='color: #74C0FC;'> <small>".$stat_azi[$azienda_clean]['feneal']."</small></i> ";
-                                        if (isset($stat_azi[$azienda_clean]['n_spec']))
-                                          echo "<i class='fas fa-square fa-sm' style='color: #ccccd1;'> <small>".$stat_azi[$azienda_clean]['n_spec']."</small></i> ";
-                                      
-                                        if (array_key_exists($azienda_clean,$elenco_assegnazioni)) {
-                                          $stat_azi_before=$elenco_assegnazioni[$azienda_clean][0]['stat_azi_before'];
-                                          
-                                          $info_before=explode(";",$stat_azi_before);
-                                          if (strlen($stat_azi_before)!=0) {
-                                            echo "<hr>";
-                                            if ($info_before[0]!="0")
-                                                echo "<i class='fas fa-square fa-sm' style='color: #FFD43B;'> <small>".$info_before[0]."</small></i> ";
-                                            
-                                            if ($info_before[1]!="0")
-                                                echo "<i class='fas fa-square fa-sm' style='color: #FF0000;'> <small>".$info_before[1]."</small></i> ";
-
-                                            if ($info_before[2]!="0")
-                                                echo "<i class='fas fa-square fa-sm' style='color: #63E6BE;'> <small>".$info_before[2]."</small></i> ";
-
-                                            if ($info_before[3]!="0")
-                                                echo "<i class='fas fa-square fa-sm' style='color: #74C0FC;'> <small>".$info_before[3]."</small></i> ";
-
-                                            if ($info_before[4]!="0")
-                                                echo "<i class='fas fa-square fa-sm' style='color: #ccccd1;'> <small>".$info_before[4]."</small></i> ";                                        
-
-                                          }   
-                                        }
-                                     }                                   
-                                    ?> 
                                   </td>
 
                                   <td id='frt_{{$info->ID_anagr}}'>
-                                    <?php
-                                      $btn_col="secondary";
-                                    
-                                      if (isset($note_l[$info->posizione]) || isset($note_a[$azienda])) $btn_col="danger";
-                                      if (isset($info->posizione) && strlen($info->posizione)>0) {
-                                      ?>
-                                        <button type="button" onclick="add_nota('{{$info->posizione}}','{{$user}}')" class="btn btn-{{$btn_col}} btn-sm">Note</button>
-                                    <?php } 
-                                    
-                                    $btn_col="secondary";
-                                    if (isset($elenco_frt[$info->posizione])) $btn_col="danger";
-                                    ?>    
-
-
-                                      <button type="button" class="btn btn-{{$btn_col}} btn-sm"  onclick="insert_frt({{$info->ID_anagr}})">
-                                        
-                                        FRT
-                                      </button>
 
                                   </td> 
 
@@ -414,22 +356,7 @@
                                      {{$info->posizione}}
                                   </td>
                                   <td>
-                                    <?php
-                                      $entr=false;
-                                      if (array_key_exists($azienda_clean,$elenco_assegnazioni)){	
-                                        $entr=true;
-                                        for ($i=0;$i<count($elenco_assegnazioni[$azienda_clean]);$i++) {
-                                          if ($i>0) echo "<hr>";
-                                          $id_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['id_assegnazione'];
-                                          $id_funz=strtoupper($elenco_assegnazioni[$azienda_clean][$i]['id_funzionario']);
-                                          $data_assegnazione=$elenco_assegnazioni[$azienda_clean][$i]['data_assegnazione'];
-                                          if (array_key_exists($id_funz,$funzionari)) {
-                                            echo "<b>$id_funz</b>: ";
-                                            echo $funzionari[$id_funz]['utentefillea'];
-                                          }
-                                        }
-                                      }                                     
-                                    ?>
+
                                   </td>
                                   <td>
                                      {{$info->COMUNENASC}}
@@ -492,80 +419,8 @@
                                   </td>
                                   
                                   <td>
-                                    <?php
-                                        $render_frt=render_frt($elenco_frt,$info->posizione,$funzionari);
-                                        echo $render_frt;
-                                        $view="";
-                                        $view.="
-                                         <span id='id_ref".$info->ID_anagr."'
-                                            data-nominativo='".$info->NOME."'
-                                            data-nome='".$info->NOME."'
-                                            data-datanasc='".$info->DATANASC."'
-                                            data-telefoni='".$tel_all."'>
-                                        </span>";                                       
-                                        echo $view;                                          
-                                      ?>  
-
-                                    
                                   </td>
                                   <td>
-                                    <?php
-                                      if (isset($note_l[$info->posizione]) || isset($note_a[$info->DENOM])) {
-                                        if (isset($note_l[$info->posizione])) {
-                                          $arr_ref=$note_l;$indice_ref=$info->posizione;
-                                        }
-                                        if (isset($note_a[$info->DENOM])) {
-                                          $arr_ref=$note_a;$indice_ref=$info->DENOM;
-                                        }
-                                        
-                                        $view='<table class="table">
-                                          <thead>
-                                            <tr>
-                                              <th scope="col" style="width:30px"></th>
-                                              <th scope="col">Utente</th>
-                                              <th scope="col">Nota</th>
-                                              <th scope="col">Data</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>';
-                                            for ($sca=0;$sca<count($arr_ref[$indice_ref]);$sca++) {
-                                              $view.="<tr>";
-                                                  $view.="<td style='width:30px'>";
-                                                  if  ($arr_ref[$indice_ref][$sca]->stato_nota=="1")
-                                                  $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #ff0000;'></i>";
-                                                if  ($arr_ref[$indice_ref][$sca]->stato_nota=="2")
-                                                  $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #FFD43B;'></i>";
-                                                if  ($arr_ref[$indice_ref][$sca]->stato_nota=="3")
-                                                  $view.="<i class='fas fa-circle fa-lg mt-3' style='color: #00ca00;'></i>";
-                                                $view.="</td>";                                              
-                                                $view.="<td>";
-                                                  $id_funz=strtoupper($arr_ref[$indice_ref][$sca]->id_user);
-                                                  //$view.=$id_funz;
-
-                                                    if (array_key_exists($id_funz,$funzionari)) {
-                                                      $view.="<b>$id_funz</b>: ";
-                                                      $view.=$funzionari[$id_funz]['utentefillea'];
-                                                    }                                                     
-                                                                   
-                                                $view.="</td>";
-                                                $view.="<td style='white-space:wrap'>";
-                                                  $view.="<i>".$arr_ref[$indice_ref][$sca]->note."</i>";
-                                                $view.="</td>";
-                                                $view.="<td>";
-                                                  $view.=$arr_ref[$indice_ref][$sca]->created_at;
-                                                $view.="</td>";                                                
-
-                                              $view.="</tr>";  
-                                            }
-                                          $view.='
-                                          </tbody>  
-                                        </table>';
-                                        
-                                        echo $view;
-                                       
-                                       
-                                      }
-                                    ?>
 
                                   </td>                                  
 
@@ -885,26 +740,21 @@
           return $t1;
         }
       ?>       
-      <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  
       <!-- dipendenze DataTables !-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css"/>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowreorder/1.5.0/css/rowReorder.dataTables.css"/>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.dataTables.css"/>
 
-        
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.5.0/js/dataTables.rowReorder.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.5.0/js/rowReorder.dataTables.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.dataTables.js"></script>
-        
+
 
       <!-- fine DataTables !-->
-      
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
-   
       
       <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
       
