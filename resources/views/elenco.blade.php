@@ -226,6 +226,10 @@
                           <div class='filtri'>
                             @if ($isadmin==1)
                               <button type="submit" name='dele_green' onclick="if (!confirm('Si conferma la cancellazione?')) {event.preventDefault();event.stopPropagation()}" value="1" class="btn btn-outline-success">Elimina tutti con pallino verde</button>
+
+                                <button type="submit" name='dele_red' onclick="if (!confirm('Si conferma la cancellazione?')) {event.preventDefault();event.stopPropagation()}" value="1" class="btn btn-outline-danger">Elimina tutti con pallino rosso</button>
+
+
                             @endif
                           </div>
 

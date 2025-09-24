@@ -93,6 +93,14 @@ class mainController extends Controller
 			->where('stato_lav', '=',3)
 			->update(['dele_workfi' => 1,'data_elimina' => $d]);
 		}
+
+		$dele_red=$request->input('dele_red');
+		if (strlen($dele_red>0)) {
+			$elenco=DB::table('anagrafe.t2_tosc_a')
+			->where('stato_lav', '=',1)
+			->update(['dele_workfi' => 1,'data_elimina' => $d]);
+		}
+		
 		$anomali=$request->input('anomali');
 		if (strlen($anomali)==0) $anomali=0;
 		$filtro_note=$request->input('filtro_note');
