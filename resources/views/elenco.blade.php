@@ -303,11 +303,19 @@
                                       $nome_orig=$info->NOME;
                                       $nominativo=$nome_orig;
                                       if (strlen($nome_orig)>18) $nominativo=substr($nome_orig,0,18)."<br>".substr($nome_orig,19);
-                                      if (isset($note_l[$info->posizione])) echo "<b>".$nominativo."</b>";
+
+                                      $bgcolor="";$color="black";
+                                      if ($info->SINDACATO=="0") {$bgcolor="yellow";$color="black";}
+                                      if ($info->SINDACATO=="1") {$bgcolor="red";$color="white";}
+                                      if ($info->SINDACATO=="2") {$bgcolor="green";$color="white";}
+                                      if ($info->SINDACATO=="3") {$bgcolor="blue";$color="white";}
+                                      if ($info->SINDACATO==" ") {$bgcolor="gray";$color="white";}
+                                      
+                                      if (isset($note_l[$info->posizione])) echo "<div style='color:$color;background-color:$bgcolor;forepadding:5px;width:300px'><b>".$nominativo."</b></div>";
                                       else  {
-                                        echo "<span title='$nome_orig'>";
+                                        echo "<div title='$nome_orig' style='color:$color;background-color:$bgcolor;padding:5px;width:300px'>";
                                         
-                                        echo "$nominativo</span>";
+                                        echo "$nominativo</div>";
                                       }
                                       
                                     ?>
