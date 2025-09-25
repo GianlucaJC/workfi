@@ -813,6 +813,26 @@
                     <label class="form-check-label for="confirm_frt">Conferma operazione di iscrizione</label>
                   </div>						
                 </div>
+
+                @if ($isadmin==1)
+                  <hr>
+                  <div class='row g-2 mb-2'>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3 mb-md-0">
+                        <select class="form-select" id="setsind" aria-label="Imposta sindacato" name='setsind' >
+                          <option value=''>Select...</option>
+                          <option value='0'>Libero</option>
+                          <option value='1'>Fillea CGIL</option>
+                          <option value='2'>Filca Cisl</option>
+                          <option value='3'>Feneal Uil</option>
+                        </select>
+                        <label for="setsind">Assegna condizione sindacale</label>
+                      </div>
+                      <button type="button" onclick='set_sind()' class="btn btn-outline-info mt-2" id='btn_save_sind'>Imposta</button>
+                      
+                    </div>                  
+                  </div>
+                @endif
               
                 
                 </div>

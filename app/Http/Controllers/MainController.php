@@ -363,6 +363,8 @@ class mainController extends Controller
 
 	}
 
+
+
 	public function redirect_url() {
 		return redirect()->away($this->redirect);		
 	}

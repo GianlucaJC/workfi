@@ -58,6 +58,18 @@ class AjaxController extends Controller
         return json_encode($risp);	
    }
 
+  public function set_sind(Request $request){		
+		$sindacato=$request->input('sindacato');
+		$id_anagr=$request->input('id_anagr');
+		$up=DB::table('anagrafe.t2_tosc_a')
+		->where('ID_anagr', '=',$id_anagr)
+		->update(['sindacato' => $sindacato]);
+		
+		
+		return "OK";		
+
+	}
+
    public function ins_frt(Request $request) {
           $id_anagr=$request->input('id_anagr');
           $operatore=$request->input('user_ref');

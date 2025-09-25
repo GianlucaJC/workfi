@@ -353,6 +353,41 @@ function view_lav(azienda) {
     })     
 }
 
+function set_sind() {
+    value=$("#setsind").val()
+    if (value.length==0) return false
+    $("#btn_save_sind").text("Attendere...")
+    $("#btn_save_sind").prop("disabled",true)
+    idmod=$("#ref_edit_frt").val()
+
+
+	var timer,delay = 800;	
+
+	clearTimeout(timer);
+	timer = setTimeout(function() {	
+		base_path = $("#url").val();
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+		});
+		let CSRF_TOKEN = $("#token_csrf").val();
+		$.ajax({
+			type: 'POST',
+			url: base_path+"/set_sind",
+			data: {_token: CSRF_TOKEN,id_anagr:idmod,sindacato:value},
+			success: function (data) {
+                $("#btn_save_sind").text("Imposta")
+                $("#btn_save_sind").prop("disabled",false)
+                if (data.trim()=="OK") {
+                    $('#modal_frt').modal('hide')
+                    alert("Impostazione effettuata. Per vedere a video la nuova condizione sindacale occorre fare un refresh")
+                } else alert("Errore occorso durante l'assegnazione!")
+			}
+		})	
+	}, delay)	
+
+}
 
 function set_filtro_stato(value) {
     $("#filtro_colore").val(value)
