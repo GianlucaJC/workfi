@@ -588,9 +588,9 @@
                       
                           <tr>
                             <th>Nominativo</th>
-                            <th>Stat</th>
+                            <th>Data Ass</th>
                             <th></th>
-                            <th>Scarico del</th>
+                            <th></th>
                             <th>Posizione</th>
                             <th>Funzionari assegnati</th>
                             <th>Nato a</th>

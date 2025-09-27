@@ -7,7 +7,7 @@ $(document).ready( function () {
       }else{
         ismobile=false
         // false for not mobile device
-        $("#btn_espandi").hide()
+        $("#btn_espandi").show()
      }
       
     tipo_view=$("#tipo_view").val()
