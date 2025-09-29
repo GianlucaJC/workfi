@@ -12,7 +12,7 @@ $(document).ready( function () {
       
     tipo_view=$("#tipo_view").val()
     set_table(tipo_view,'tbl_articoli')
-    setZoom(zoomI,0)
+   
 
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -383,6 +383,42 @@ function set_sind() {
                 if (data.trim()=="OK") {
                     $('#modal_frt').modal('hide')
                     alert("Impostazione effettuata. Per vedere a video la nuova condizione sindacale occorre fare un refresh")
+                } else alert("Errore occorso durante l'assegnazione!")
+			}
+		})	
+	}, delay)	
+
+}
+
+function set_vers() {
+    value=$("#setvers").val()
+    if (value.length==0) return false
+    $("#btn_save_vers").text("Attendere...")
+    $("#btn_save_vser").prop("disabled",true)
+    idmod=$("#ref_edit_frt").val()
+
+
+	var timer,delay = 800;	
+
+	clearTimeout(timer);
+	timer = setTimeout(function() {	
+		base_path = $("#url").val();
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+		});
+		let CSRF_TOKEN = $("#token_csrf").val();
+		$.ajax({
+			type: 'POST',
+			url: base_path+"/set_vers",
+			data: {_token: CSRF_TOKEN,id_anagr:idmod,versanti:value},
+			success: function (data) {
+                $("#btn_save_vers").text("Imposta")
+                $("#btn_save_vers").prop("disabled",false)
+                if (data.trim()=="OK") {
+                    $('#modal_frt').modal('hide')
+                    alert("Impostazione effettuata. Per vedere a video il colore del nuovo stato occorre fare un refresh")
                 } else alert("Errore occorso durante l'assegnazione!")
 			}
 		})	

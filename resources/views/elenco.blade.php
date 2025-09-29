@@ -303,7 +303,7 @@
                             ?>
 
                               <tr id='tr{{$info->ID_anagr}}'>
-                                  <td class="{{$cl_ref}}">
+                                  <td class="{{$cl_ref}}" title='Nominativo'>
                                     <?php
                                       $nome_orig=$info->NOME;
                                       $nominativo=$nome_orig;
@@ -357,11 +357,11 @@
 
                                   </td>
 
-                                  <td class="{{$cl_ref}}">
+                                  <td class="{{$cl_ref}}" title='Data assunzione'>
                                     {{$info->data_scarico}}
                                   </td>                                  
 
-                                  <td>
+                                  <td  title='Statistiche'>
                                     <?php
 
                                     
@@ -404,7 +404,7 @@
                                     ?> 
                                   </td>
 
-                                  <td id='frt_{{$info->ID_anagr}}'>
+                                  <td id='frt_{{$info->ID_anagr}}' title='Azioni'>
                                     <?php
                                       $btn_col="secondary";
                                     
@@ -427,10 +427,20 @@
                                   </td> 
 
 
-                                  <td>
-                                     {{$info->posizione}}
+                                  <td title='Posizione'>
+                                    <?php 
+                                      
+                                      $bgcolor="";
+                                      if ($info->versanti=='0') $bgcolor="background-color:pink;";
+
+                                      echo "<div style='$bgcolor;forepadding:5px;width:300px'>";
+                                        echo $info->posizione;
+                                      echo "</div>";
+
+
+                                    ?> 
                                   </td>
-                                  <td>
+                                  <td title='Azienda'>
                                       
                                       <?php
                                       $pref="https://www.filleaoffice.it";
@@ -444,7 +454,7 @@
                                       ?>                                         
                                   </td>                                  
 
-                                  <td>
+                                  <td title='Funzionari assegnati'>
                                     <?php
                                       $entr=false;
                                       if (array_key_exists($azienda_clean,$elenco_assegnazioni)){	
@@ -462,14 +472,14 @@
                                       }                                     
                                     ?>
                                   </td>
-                                  <td>
+                                  <td title='Nato a'>
                                      {{$info->COMUNENASC}}
                                   </td>
-                                  <td>
+                                  <td title='Nato il'>
                                      {{date('d-m-Y', strtotime($info->DATANASC));}}
                                   </td>                                  
 
-                                  <td>
+                                  <td title='Altrove'>
                                     <?php
                                       if (isset($info_altrove[$info->ID_anagr])) {
                                           $refarr=$info_altrove[$info->ID_anagr];
@@ -494,23 +504,23 @@
                                     $t5=adegua_tel($t5);
                                     $tel_all="$t1 $t2 $t3 $t4 $t5";
                                   ?>
-                                  <td>
+                                  <td title='TelFO'>
                                     <a id="phone1" href="tel:{{$t1}}">{{$t1}}</a>
                                   </td>
-                                  <td>
+                                  <td title='TelCE'>
                                     <a id="phone2" href="tel:{{$t2}}">{{$t2}}</a>
                                   </td>
-                                  <td>
+                                  <td title='TelGPS'>
                                     <a id="phone3" href="tel:{{$t3}}">{{$t3}}</a>
                                   </td>
-                                  <td>
+                                  <td title='TelSIN'>
                                     <a id="phone4" href="tel:{{$t4}}">{{$t4}}</a>
                                   </td>
-                                  <td>
+                                  <td title='TelAltro'>
                                     <a id="phone5" href="tel:{{$t5}}">{{$t5}}</a>
                                   </td>
                                   
-                                  <td>
+                                  <td title='FRT'>
                                     <?php
                                         $render_frt=render_frt($elenco_frt,$info->posizione,$funzionari);
                                         echo $render_frt;
@@ -527,7 +537,7 @@
 
                                     
                                   </td>
-                                  <td>
+                                  <td title="Note">
                                     <?php
                                       if (isset($note_l[$info->posizione]) || isset($note_a[$info->DENOM])) {
                                         if (isset($note_l[$info->posizione])) {
@@ -838,7 +848,19 @@
                       </div>
                       <button type="button" onclick='set_sind()' class="btn btn-outline-info mt-2" id='btn_save_sind'>Imposta</button>
                       
-                    </div>                  
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3 mb-md-0">
+                        <select class="form-select" id="setvers" aria-label="Imposta non versanti" name='setvers' >
+                          <option value=''>Select...</option>
+                          <option value='0'>Non Versanti</option>
+                          <option value='1'>Versanti</option>
+                        </select>
+                        <label for="setsind">Assegna non versanti</label>
+                      </div>
+                      <button type="button" onclick='set_vers()' class="btn btn-outline-info mt-2" id='btn_save_vers'>Imposta</button>
+                      
+                    </div>                      
                   </div>
                 @endif
               

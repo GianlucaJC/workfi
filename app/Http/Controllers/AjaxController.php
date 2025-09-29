@@ -64,10 +64,16 @@ class AjaxController extends Controller
 		$up=DB::table('anagrafe.t2_tosc_a')
 		->where('ID_anagr', '=',$id_anagr)
 		->update(['sindacato' => $sindacato]);
-		
-		
 		return "OK";		
-
+	}
+  
+  public function set_vers(Request $request){		
+		$versanti=$request->input('versanti');
+		$id_anagr=$request->input('id_anagr');
+		$up=DB::table('anagrafe.t2_tosc_a')
+		->where('ID_anagr', '=',$id_anagr)
+		->update(['versanti' => $versanti]);
+		return "OK";		
 	}
 
    public function ins_frt(Request $request) {
