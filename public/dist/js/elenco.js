@@ -12,6 +12,7 @@ $(document).ready( function () {
       
     tipo_view=$("#tipo_view").val()
     set_table(tipo_view,'tbl_articoli')
+    setZoom(zoomI,0)
 
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -392,4 +393,10 @@ function set_sind() {
 function set_filtro_stato(value) {
     $("#filtro_colore").val(value)
     $("#frm_main").submit()
+}
+
+function setZoom(value,from) {
+	//$('#div_tb').css('transform','scale('+value+')');
+	//$('#div_tb').css('transformOrigin','left top');
+    $("#div_tb").css('width',value*5000)
 }

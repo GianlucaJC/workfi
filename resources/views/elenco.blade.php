@@ -191,6 +191,10 @@
                       $vis="";
                       if ($op_az!='op') $vis="display:none";
                     ?>
+                  <div class="ml-3" style='width:20%'>
+                      <label for="zoomlevel" class="form-label">Zoom level</label>
+                      <input type="range" class="form-range" min="0.10" max="1.05" step="0.02" id="zoomlevel"  onchange="setZoom(this.value,1)">
+                  </div>               
                     <div id="div_table">
                       <div class="filtraggio" id='div_filtri' style="{{$vis}}">
                         <div class="filtri" class='mb-3'>
@@ -263,6 +267,7 @@
                       </div>
 
                       @if ($op_az=='op')
+                    <div id='div_tb'>  
                       <table id='tbl_articoli' class="display nowrap">
                         <thead>
                           <tr>
@@ -271,10 +276,10 @@
                             <th>Stat</th>
                             <th>Azioni</th>
                             <th>Posizione</th>
+                            <th>Azienda</th>
                             <th>Funzionari assegnati</th>
                             <th>Nato a</th>
                             <th>Nato il</th>
-                            <th>Azienda</th>
                             <th>Altrove</th>
                             <th>Tel FO</th>
                             <th>Tel CE</th>
@@ -426,6 +431,20 @@
                                      {{$info->posizione}}
                                   </td>
                                   <td>
+                                      
+                                      <?php
+                                      $pref="https://www.filleaoffice.it";
+                                      if ($_SERVER["HTTP_HOST"]=="localhost:8012")
+                                          $pref="http://localhost/";
+
+                                      if (strlen($p_iva)!=0)
+                                        echo "<a href='".$pref."/anagrafe/pages/consultazioni/consultazioni.php?token=".$token."&tb_fo=t2_tosc_a&p_iva=".$p_iva."' target='_blank'>$azienda</a>";      
+                                      else
+                                        echo "<a href='".$pref."/anagrafe/pages/consultazioni/consultazioni.php?token=".$token."&tb_fo=t2_tosc_a&azienda=".$azienda."' target='_blank'>$azienda</a>";   
+                                      ?>                                         
+                                  </td>                                  
+
+                                  <td>
                                     <?php
                                       $entr=false;
                                       if (array_key_exists($azienda_clean,$elenco_assegnazioni)){	
@@ -449,19 +468,7 @@
                                   <td>
                                      {{date('d-m-Y', strtotime($info->DATANASC));}}
                                   </td>                                  
-                                  <td>
-                                      
-                                      <?php
-                                      $pref="https://www.filleaoffice.it";
-                                      if ($_SERVER["HTTP_HOST"]=="localhost:8012")
-                                          $pref="http://localhost/";
 
-                                      if (strlen($p_iva)!=0)
-                                        echo "<a href='".$pref."/anagrafe/pages/consultazioni/consultazioni.php?token=".$token."&tb_fo=t2_tosc_a&p_iva=".$p_iva."' target='_blank'>$azienda</a>";      
-                                      else
-                                        echo "<a href='".$pref."/anagrafe/pages/consultazioni/consultazioni.php?token=".$token."&tb_fo=t2_tosc_a&azienda=".$azienda."' target='_blank'>$azienda</a>";   
-                                      ?>                                         
-                                  </td>
                                   <td>
                                     <?php
                                       if (isset($info_altrove[$info->ID_anagr])) {
@@ -608,6 +615,7 @@
                       
                         </tfoot>					
                       </table>
+                    </div>  
                       @endif
 
                       @if ($op_az=='az')
